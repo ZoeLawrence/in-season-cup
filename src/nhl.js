@@ -10,7 +10,8 @@ export async function getCurrentMatchup() {
     } catch {
       // ignore
     }
-    throw new Error(errorText);
+    // throw new Error(errorText);
+    return errorText;
   }
   const data = await response.json();
   const game = data.games[0];
