@@ -1,5 +1,5 @@
 {
-  "name": "awwbot",
+  "name": "in-season-cup-bot",
   "version": "1.0.0",
   "description": "A simple discord bot that uses intents to post pictures from r/aww",
   "type": "module",
@@ -15,7 +15,7 @@
     "publish": "wrangler deploy"
   },
   "keywords": [],
-  "author": "Justin Beckwith <justin.beckwith@gmail.com>",
+  "author": "Zoe Lawrence <z_h_lawrence@live.com>",
   "license": "MIT",
   "dependencies": {
     "discord-interactions": "^4.0.0",
@@ -34,6 +34,6 @@
     "ngrok": "^5.0.0-beta.2",
     "prettier": "^3.2.5",
     "sinon": "^21.0.0",
-    "wrangler": "^4.13.2"
+    "wrangler": "^4.42.0"
   }
 }
