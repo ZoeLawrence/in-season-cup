@@ -26,13 +26,12 @@ class JsonResponse extends Response {
 }
 
 const router = AutoRouter();
-let currentInteraction = ``;
 
 /**
  * A simple :wave: hello page to verify the worker is working.
  */
 router.get('/', (request, env) => {
-  return new Response(`👋 ${currentInteraction}`);
+  return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
 });
 
 /**
@@ -95,7 +94,7 @@ router.post('/', async (request, env) => {
         const options = interaction.data.options;
         let text = `test interactions`; 
         for(let i = 0; i < 3; i++) {
-          text += ` opt value ${i} is ${options[i]}`;
+          text += ` opt value ${i} is ${options[i].value}`;
         }
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -120,7 +119,7 @@ async function verifyDiscordRequest(request, env) {
   const signature = request.headers.get('x-signature-ed25519');
   const timestamp = request.headers.get('x-signature-timestamp');
   const body = await request.text();
-  currentInteraction = body;
+  console.log(body);
   const isValidRequest =
     signature &&
     timestamp &&
