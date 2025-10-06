@@ -66,7 +66,7 @@ router.post('/', async (request, env) => {
             components: [
               {
                 type: MessageComponentTypes.TEXT_DISPLAY,
-                content: `hello world ${await getCurrentMatchup()}`
+                content: `hello world`
               }
             ]
           },
