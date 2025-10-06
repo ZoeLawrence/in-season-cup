@@ -63,11 +63,10 @@ router.post('/', async (request, env) => {
         return new JsonResponse({
           type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            flags: InteractionResponseFlags.EPHEMERAL,
             components: [
               {
                 type: MessageComponentTypes.TEXT_DISPLAY,
-                // Fetches a random emoji to send from a helper function
                 content: `hello world ${matchUp}`
               }
             ]
