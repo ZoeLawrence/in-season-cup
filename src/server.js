@@ -101,7 +101,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `assign ${options[1]} to ${options[0]} and champion as ${options[2]}`,
+            content: `assign ${options[1].value} to ${options[0].value} and champion as ${options[2].value}`,
           },
         });
       }
