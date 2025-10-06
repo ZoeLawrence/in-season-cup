@@ -95,7 +95,7 @@ router.post('/', async (request, env) => {
         const options = interaction.data.options;
         let text = `test interactions`; 
         for(let i = 0; i < 3; i++) {
-          text += ` opt value ${i} is ${options[i].value}`;
+          text += ` opt value ${i} is ${options[i]}`;
         }
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
