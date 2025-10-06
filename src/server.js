@@ -85,12 +85,12 @@ router.post('/', async (request, env) => {
         });
       }
       case TEST_COMMAND.name.toLowerCase(): {
-        const message = `hello world ${getRandomEmoji()}`;
+        const randomEmoji = await getRandomEmoji();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: message,
+            content: `hello world ${randomEmoji}`,
           },
         });
       }
