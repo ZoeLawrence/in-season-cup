@@ -10,6 +10,7 @@ import {
 } from 'discord-interactions';
 import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
+import { getRandomEmoji } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 
 class JsonResponse extends Response {
@@ -66,7 +67,7 @@ router.post('/', async (request, env) => {
             components: [
               {
                 type: MessageComponentTypes.TEXT_DISPLAY,
-                content: `hello world`
+                content: `hello world ${await getCurrentMatchup()}`
               }
             ]
           },
