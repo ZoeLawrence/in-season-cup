@@ -92,8 +92,8 @@ router.post('/', async (request, env) => {
         });
       }
       case SETUP_COMMAND.name.toLowerCase(): {
-        const options = interaction.data.options.options;
-        console.log(`options: ${options}`)
+        const options = interaction.data.options[0].options;
+        console.log(`options: ${interaction.data.options[0].options[0]}`)
         // let text = `test interactions`; 
         // for(let i = 0; i < 3; i++) {
         //   text += ` opt value ${i} is ${options[i].value}`;
