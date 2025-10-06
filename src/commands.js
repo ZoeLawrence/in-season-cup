@@ -39,6 +39,11 @@ export const SETUP_COMMAND = {
           type: 8,
           required: true,
         },
+         {
+          name: 'champion',
+          description: 'sets whether user is the current champion',
+          type: 5,
+        },
       ],
     },
   ],
