@@ -60,16 +60,12 @@ router.post('/', async (request, env) => {
     // Most user commands will come as `APPLICATION_COMMAND`.
     switch (interaction.data.name.toLowerCase()) {
       case MATCH_UP_COMMAND.name.toLowerCase(): {
+         const currentMatchup = await getCurrentMatchup();
         return new JsonResponse({
-          type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            flags: InteractionResponseFlags.EPHEMERAL,
-            components: [
-              {
-                type: MessageComponentTypes.TEXT_DISPLAY,
-                content: `hello world ${await getCurrentMatchup()}`
-              }
-            ]
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `hello world ${currentMatchup}`,
           },
         });
       }
