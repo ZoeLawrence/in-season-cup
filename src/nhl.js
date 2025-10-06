@@ -10,12 +10,12 @@ export async function getCurrentMatchup() {
     } catch {
       // ignore
     }
-    // throw new Error(errorText);
-    return errorText;
+    throw new Error(errorText);
   }
   const data = await response.json();
   const game = data.games[0];
-  const awayTeam = game.awayTeam.commonName.default
+  const awayTeam = game.awayTeam.commonName.default;
+  const homeTeam = game.homeTeam.commonName.default;
 //   const posts = data.games.children
 //     .map((post) => {
 //       if (post.is_gallery) {
@@ -30,7 +30,7 @@ export async function getCurrentMatchup() {
 //     .filter((post) => !!post);
 //   const randomIndex = Math.floor(Math.random() * posts.length);
 //   const randomPost = posts[randomIndex];
-  return awayTeam;
+  return `Current champs ${currentChamp} vs ${awayTeam}`;
 }
 
 //Things needed to determine the current match-up
