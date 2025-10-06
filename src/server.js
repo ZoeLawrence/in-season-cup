@@ -61,7 +61,7 @@ router.post('/', async (request, env) => {
       case MATCH_UP_COMMAND.name.toLowerCase(): {
         const matchUp = await getCurrentMatchup();
         return new JsonResponse({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
             components: [
