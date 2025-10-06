@@ -40,6 +40,7 @@ router.get('/', (request, env) => {
  * https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
  */
 router.post('/', async (request, env) => {
+  // console.log(request);
   const { isValid, interaction } = await server.verifyDiscordRequest(
     request,
     env,
@@ -91,16 +92,16 @@ router.post('/', async (request, env) => {
         });
       }
       case SETUP_COMMAND.name.toLowerCase(): {
-        const options = interaction.data.options;
-        let text = `test interactions`; 
-        for(let i = 0; i < 3; i++) {
-          text += ` opt value ${i} is ${options[i].value}`;
-        }
+        const options = interaction.data.options.options;
+        // let text = `test interactions`; 
+        // for(let i = 0; i < 3; i++) {
+        //   text += ` opt value ${i} is ${options[i].value}`;
+        // }
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: text,
+            content: `assign ${options[1]} to ${options[0]} and champion as ${options[2]}`,
           },
         });
       }
@@ -119,7 +120,6 @@ async function verifyDiscordRequest(request, env) {
   const signature = request.headers.get('x-signature-ed25519');
   const timestamp = request.headers.get('x-signature-timestamp');
   const body = await request.text();
-  console.log(body);
   const isValidRequest =
     signature &&
     timestamp &&
