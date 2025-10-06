@@ -1,4 +1,4 @@
-import { AWW_COMMAND, INVITE_COMMAND, MATCH_UP_COMMAND, TEST_COMMAND } from './commands.js';
+import { INVITE_COMMAND, MATCH_UP_COMMAND, TEST_COMMAND } from './commands.js';
 import dotenv from 'dotenv';
 import process from 'node:process';
 
