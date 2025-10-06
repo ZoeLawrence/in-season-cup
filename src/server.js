@@ -9,6 +9,7 @@ import {
   verifyKey,
 } from 'discord-interactions';
 import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND } from './commands.js';
+import { getCurrentMatchup } from './nhl.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 
 class JsonResponse extends Response {
@@ -57,6 +58,22 @@ router.post('/', async (request, env) => {
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     // Most user commands will come as `APPLICATION_COMMAND`.
     switch (interaction.data.name.toLowerCase()) {
+      case MATCH_UP_COMMAND.name.toLowerCase(): {
+        const matchUp = await getCurrentMatchup();
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            components: [
+              {
+                type: MessageComponentTypes.TEXT_DISPLAY,
+                // Fetches a random emoji to send from a helper function
+                content: `hello world ${matchUp}`
+              }
+            ]
+          },
+        });
+      }
       case INVITE_COMMAND.name.toLowerCase(): {
         const applicationId = env.DISCORD_APPLICATION_ID;
         const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;
