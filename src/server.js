@@ -8,7 +8,7 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND } from './commands.js';
+import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND, SETUP_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
 import { getRandomEmoji } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
@@ -87,6 +87,15 @@ router.post('/', async (request, env) => {
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
             content: `hello world ${randomEmoji}`,
+          },
+        });
+      }
+      case SETUP_COMMAND.name.toLowerCase(): {
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `hello world`,
           },
         });
       }

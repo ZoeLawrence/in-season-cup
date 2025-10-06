@@ -17,3 +17,29 @@ export const MATCH_UP_COMMAND = {
   name: 'match-up',
   description: 'next match-up for the in-season cup',
 };
+
+export const SETUP_COMMAND = {
+  name: 'set-up',
+  description: 'set-up the bot for a new season',
+  options: [
+    {
+      name: 'assign',
+      description: 'assign teams',
+      type: 1,
+      options: [
+        {
+          name: 'user',
+          description: 'user to assign to team',
+          type: 6,
+          required: true,
+        },
+        {
+          name: 'team',
+          description: 'team to assign user to',
+          type: 8,
+          required: true,
+        },
+      ],
+    },
+  ],
+};
