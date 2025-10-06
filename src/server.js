@@ -91,11 +91,16 @@ router.post('/', async (request, env) => {
         });
       }
       case SETUP_COMMAND.name.toLowerCase(): {
+        const options = interaction.data.options;
+        let text = `test interactions`; 
+        for(let i = 0; i < 3; i++) {
+          text += ` opt value ${i} is ${options[i]}`;
+        }
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `test interaction: ${interaction.data}`,
+            content: text,
           },
         });
       }
