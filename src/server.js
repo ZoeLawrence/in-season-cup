@@ -189,10 +189,10 @@ async function verifyDiscordRequest(request, env) {
 
 async function checkUser(username, request, env) {
   const { results } = await env.ASSIGN_DB
-        .prepare("SELECT * FROM Persons WHERE username = ?")
+        .prepare("SELECT * FROM Persons WHERE username = ?;")
         .bind(username)
         .run();
-  return JSON.parse(Response.json(results));
+  return JSON.stringify(Response.json(results));
 }
 
 async function addItem(username, team, isChamp, request, env) {
