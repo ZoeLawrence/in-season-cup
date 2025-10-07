@@ -205,7 +205,7 @@ async function checkUser(username, request, env) {
 
 async function assignTeams(results, request, env) {
   const teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
-  const assignments = ``; //[];
+  let assignments = ``; //[];
   let x = 0;
   for(var i = teamList.length-1;i>=0;i--){
     const team = teamList.splice(Math.floor(Math.random()*teamList.length), 1);
