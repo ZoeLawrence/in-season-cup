@@ -67,22 +67,22 @@ router.post('/', async (request, env) => {
     //       flags: InteractionResponseFlags.EPHEMERAL,
     //     },
     //   });
-    const res = await server.checkUser(interaction.member.user.id, request, env);
-    // if(res.results != null && res.results.length > 0 ) {
-    //   return new JsonResponse({
-    //     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //     data: {
-    //       content: `${res.results[0].username} assigned to ${res.results[0].team}`,
-    //       flags: InteractionResponseFlags.EPHEMERAL,
-    //     },
-    //   });
-    // }
+    const results = await server.checkUser(interaction.member.user.id, request, env);
+    if(results != null && results.length > 0 ) {
+      return new JsonResponse({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `${results[0].username} assigned to ${results[0].team}`,
+          flags: InteractionResponseFlags.EPHEMERAL,
+        },
+      });
+    }
     const team = await getRandomTeam();
     await server.addItem(interaction.member.user.id, team, false, request, env);
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `${interaction.member.user.id} ${JSON.stringify(res)} Assigned to ${team}`,
+        content: `Assigned to ${team}`,
         flags: InteractionResponseFlags.EPHEMERAL,
       },
     });
