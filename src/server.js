@@ -13,6 +13,7 @@ import { getRandomEmoji } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import process from 'node:process';
 
 class JsonResponse extends Response {
   constructor(body, init) {
