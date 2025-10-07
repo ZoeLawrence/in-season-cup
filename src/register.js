@@ -28,6 +28,8 @@ if (!applicationId) {
  */
 const url = `https://discord.com/api/v10/applications/${applicationId}/commands`;
 
+console.log(JSON.stringify([INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND]));
+
 const response = await fetch(url, {
   headers: {
     'Content-Type': 'application/json',

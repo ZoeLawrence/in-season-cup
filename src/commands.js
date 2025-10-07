@@ -20,38 +20,30 @@ export const JOIN_COMMAND = {
 
 export const ASSIGN_COMMAND = {
   name: 'group-assign',
-  description: 'Assigns all users to a team and responds posts assignments',
-  options: [
-    {
-      name: 'current champ',
-      description: 'use 3 letter code (ex: SEA)',
-      type: 6,
-      required: true,
-    },
-  ],
+  description: 'Assigns all users to a team and posts assignments',
 };
 
 export const START_COMMAND = {
   name: 'start',
-  description: 'starts the tournament'
+  description: 'starts the tournament',
 };
 
 export const SWAP_COMMAND = {
   name: 'swap',
   description: 'swaps the teams of two users',
   type: 1,
-  options: [
-    {
-      name: 'player one',
-      description: '',
-      type: 6,
-      required: true,
-    },
-    {
-      name: 'player two',
-      description: '',
-      type: 6,
-      required: true,
-    },
-  ],
+  // options: [
+  //   {
+  //     name: 'player one',
+  //     description: 'first player to swap',
+  //     type: 6,
+  //     required: true,
+  //   },
+  //   {
+  //     name: 'player two',
+  //     description: 'second player to swap',
+  //     type: 6,
+  //     required: true,
+  //   },
+  // ],
 };
