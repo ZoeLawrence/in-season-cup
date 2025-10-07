@@ -152,7 +152,6 @@ router.post('/', async (request, env) => {
           request,
           env,
         );
-        console.log(`res: ${res}`);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
@@ -192,7 +191,7 @@ async function checkUser(username, request, env) {
         .prepare("SELECT * FROM Persons WHERE username = ?;")
         .bind(username)
         .run();
-  return JSON.stringify(Response.json(results));
+  return Response.json(results);
 }
 
 async function addItem(username, team, isChamp, request, env) {
@@ -200,7 +199,7 @@ async function addItem(username, team, isChamp, request, env) {
         .prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?);")
         .bind(username, team, isChamp)
         .run();
-  return JSON.parse(Response.json(results));
+  return Response.json(results);
 }
 
 const server = {
