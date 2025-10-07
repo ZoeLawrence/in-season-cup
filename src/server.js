@@ -57,11 +57,11 @@ router.post('/', async (request, env) => {
   }
 
   if(interaction.type == InteractionType.MESSAGE_COMPONENT) {
-    const team = await getRandomTeam();
+    // const team = await getRandomTeam();
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `Assigned to ${team}`,
+        content: `Assigned to `,
         flags: InteractionResponseFlags.EPHEMERAL,
       },
     });
@@ -103,7 +103,7 @@ router.post('/', async (request, env) => {
                 components: [
                   {
                     type: 10,  // ComponentType.TEXT_DISPLAY
-                    content: "# Join the In Season Cup"
+                    content: "Join the In Season Cup"
                   },
                   {
                     type: 1,  // ComponentType.ACTION_ROW
