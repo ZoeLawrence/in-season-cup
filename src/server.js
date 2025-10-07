@@ -207,7 +207,6 @@ async function assignTeams(results, request, env) {
   const teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
   let assignments = [];
   let x = 0;
-  
   const stmt  = env.ASSIGN_DB.prepare("INSERT INTO players (team, user_id, isChamp) VALUES (?, ?, false);")
   // for(var i = teamList.length-1;i>=0;i--){
   //   const team = teamList.splice(Math.floor(Math.random()*teamList.length), 1);
@@ -216,11 +215,9 @@ async function assignTeams(results, request, env) {
   //   assignments[x] = team;
   //   x++;
   // }
-  assignments[0] = stmt.bind(teamList[0], results[0].username);
-  assignments[1] = stmt.bind(teamList[1], results[1].username);
-  assignments[2] = stmt.bind(teamList[2], results[2].username);
-  assignments[3] = stmt.bind(teamList[3], results[3].username);
-  assignments[4] = stmt.bind(teamList[4], results[4].username);
+  for(var i = 0;i < results.length;i++){
+    assignments[i] = stmt.bind(teamList[i], results[i].username);
+  }
   const { res } = await env.ASSIGN_DB.batch(assignments)
   return res;
 }
