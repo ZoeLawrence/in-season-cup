@@ -11,7 +11,8 @@ import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND, SETUP_COMMAND } from '.
 import { getCurrentMatchup } from './nhl.js';
 import { getRandomEmoji } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
-import { addItem } from './dynamodb.js';
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -25,6 +26,14 @@ class JsonResponse extends Response {
   }
 }
 
+const config = {
+	region: 'us-east-2',
+	accessKeyId: env.AWS_ACCESS_KEY_ID,
+	secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+}
+
+const client = new DynamoDBClient(config);
+const docClient = DynamoDBDocumentClient.from(client);
 const router = AutoRouter();
 
 /**
@@ -92,8 +101,8 @@ router.post('/', async (request, env) => {
         });
       }
       case SETUP_COMMAND.name.toLowerCase(): {
-        addItem(options[0].value, options[1].value, options[2].value);
         const options = interaction.data.options[0].options;
+        addItem(options[0].value, options[1].value, options[2].value);
         // console.log(`options: ${interaction.data.options[0].options[0]}`)
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -127,6 +136,18 @@ async function verifyDiscordRequest(request, env) {
   }
 
   return { interaction: JSON.parse(body), isValid: true };
+}
+
+async function addItem(username, team, isChamp) {
+  const putCommand = new PutCommand({
+    TableName: "assignments",
+    Item: {
+      username: username,
+      team: team,
+      isChamp: isChamp,
+    },
+  });
+  await docClient.send(putCommand);
 }
 
 const server = {
