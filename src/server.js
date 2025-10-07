@@ -38,6 +38,8 @@ router.get('/', (request, env) => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
   });
   client.login(env.DISCORD_TOKEN);
+  const channel = client.channels.cache.get('id');
+  channel.send('content');
   return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
 });
 
@@ -47,14 +49,7 @@ router.get('/', (request, env) => {
  * https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
  */
 router.post('/', async (request, env) => {
-  const exampleTextDisplay = new TextDisplayBuilder().setContent(
-    'This text is inside a Text Display component! You can use **any __markdown__** available inside this component too.',
-  );
-  const channel = client.channels.cache.get('id');
-  await channel.send({
-    components: [exampleTextDisplay],
-    flags: MessageFlags.IsComponentsV2,
-  });
+  // console.log(request);  
   const { isValid, interaction } = await server.verifyDiscordRequest(
     request,
     env,
