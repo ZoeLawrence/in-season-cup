@@ -85,15 +85,21 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            components: [{
-              type: 1,
-              components: [{
-                type: 2,
-                custom_id: "join",
-                label: "Join",
-                style: 1
-              }],
-            }],
+            components: [
+              {
+                type: 10,
+                content: "# Join the In Season Cup"
+              },
+              {
+                type: 1,
+                components: [{
+                  type: 2,
+                  custom_id: "join",
+                  label: "Join",
+                  style: 1
+                }],
+              }
+            ],
           },
         });
       }
