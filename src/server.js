@@ -133,12 +133,12 @@ router.post('/', async (request, env) => {
       case ASSIGN_COMMAND.name.toLowerCase(): {
         //Pull all teams from DB, pull all users from DB
         const res = await server.getUsers(request, env);
-        const assignments = await server.assignTeams(res, request, env);
+        // const assignments = await server.assignTeams(res, request, env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.EPHEMERAL,
-            content: `Assignments ${assignments}`,
+            content: `Assignments ${res}`,
           },
         });
       }
