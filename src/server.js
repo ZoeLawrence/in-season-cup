@@ -221,8 +221,6 @@ async function getUsers(request, env) {
   return results;
 }
 
-const { res } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
-
 async function addItem(username, team, isChamp, request, env) {
   const { results } = await env.ASSIGN_DB
         .prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?);")
