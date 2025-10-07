@@ -9,7 +9,7 @@ import {
 } from 'discord-interactions';
 import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND, SETUP_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
-import { getRandomEmoji } from './emoji.js';
+import { getRandomEmoji, getRandomTeam } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 
 class JsonResponse extends Response {
@@ -81,12 +81,19 @@ router.post('/', async (request, env) => {
         });
       }
       case TEST_COMMAND.name.toLowerCase(): {
-        const randomEmoji = await getRandomEmoji();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `hello world ${randomEmoji}`,
+            components: [{
+              type: 1,
+              components: [{
+                type: 2,
+                custom_id: "join",
+                label: "Join",
+                style: 1
+              }],
+            }],
           },
         });
       }
