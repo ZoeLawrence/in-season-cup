@@ -39,6 +39,8 @@ router.get('/', (request, env) => {
  */
 router.post('/', async (request, env) => {
   // console.log(request);
+  await testAssignments(env);
+  
   const { isValid, interaction } = await server.verifyDiscordRequest(
     request,
     env,
@@ -138,8 +140,8 @@ router.post('/', async (request, env) => {
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `Assignments: ${assignments}`,
+            flags: InteractionResponseFlags.EPHEMERAL,
+            content: `Assignments ${assignments}`,
           },
         });
       }
