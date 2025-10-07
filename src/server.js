@@ -59,7 +59,7 @@ router.post('/', async (request, env) => {
 
   if(interaction.type == InteractionType.MESSAGE_COMPONENT) {
     // check if they are already
-    const results = await server.checkUser(interaction.user.id, request, env);
+    const results = await server.checkUser(interaction.member.user.id, request, env);
     return new JsonResponse({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
