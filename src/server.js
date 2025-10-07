@@ -9,7 +9,7 @@ import {
 } from 'discord-interactions';
 import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND, SETUP_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
-import { getRandomEmoji, getRandomTeam } from './emoji.js';
+import { getRandomTeam } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 
 class JsonResponse extends Response {
@@ -56,11 +56,22 @@ router.post('/', async (request, env) => {
     });
   }
 
+  if(interaction.type == InteractionType.MESSAGE_COMPONENT) {
+    const team = await getRandomTeam();
+    return new JsonResponse({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: `Assigned to ${team}`,
+        flags: InteractionResponseFlags.EPHEMERAL,
+      },
+    });
+  }
+
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     // Most user commands will come as `APPLICATION_COMMAND`.
     switch (interaction.data.name.toLowerCase()) {
       case MATCH_UP_COMMAND.name.toLowerCase(): {
-         const currentMatchup = await getCurrentMatchup();
+        const currentMatchup = await getCurrentMatchup();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
