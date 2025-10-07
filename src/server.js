@@ -59,33 +59,33 @@ router.post('/', async (request, env) => {
 
   if(interaction.type == InteractionType.MESSAGE_COMPONENT) {
     // check if they are already
-    const results = await server.checkUser(interaction.member.user.id, request, env);
-    return new JsonResponse({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: `${results} assigned to`,
-          flags: InteractionResponseFlags.EPHEMERAL,
-        },
-      });
-    // const results = res.result[0].results[0]
-    // if(Object.values(results).includes("username")) {
-    //   return new JsonResponse({
+    // const results = await server.checkUser(interaction.member.user.id, request, env);
+    // return new JsonResponse({
     //     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     //     data: {
-    //       content: `${results.username} assigned to ${results.team}`,
+    //       content: `${results} assigned to`,
     //       flags: InteractionResponseFlags.EPHEMERAL,
     //     },
     //   });
-    // }
-    // const team = await getRandomTeam();
-    // const res2 = await server.addItem(interaction.user.id, team, false, request, env);
-    // return new JsonResponse({
-    //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //   data: {
-    //     content: `Assigned to ${team}`,
-    //     flags: InteractionResponseFlags.EPHEMERAL,
-    //   },
-    // });
+    const res = await server.checkUser(interaction.member.user.id, request, env);
+    if(Object.values(res).includes("username")) {
+      return new JsonResponse({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `${res.result[0].results[0].username} assigned to ${res.result[0].results[0].team}`,
+          flags: InteractionResponseFlags.EPHEMERAL,
+        },
+      });
+    }
+    const team = await getRandomTeam();
+    await server.addItem(interaction.member.user.id, team, false, request, env);
+    return new JsonResponse({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: `Assigned to ${team}`,
+        flags: InteractionResponseFlags.EPHEMERAL,
+      },
+    });
   }
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
