@@ -210,7 +210,7 @@ async function assignTeams(res, request, env) {
   let x = 0;
   for(var i = teamList.length-1;i>=0;i--){
     const team = teamList.splice(Math.floor(Math.random()*teamList.length), 1);
-    assignments[x] = stmt.bind(team, res[i].username);
+    assignments[x] = team; // stmt.bind(team, res[x+1].username);
     x++;
   }
   // const { results } = await env.ASSIGN_DB.batch(assignments)
