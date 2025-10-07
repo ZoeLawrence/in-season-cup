@@ -60,7 +60,7 @@ router.post('/', async (request, env) => {
       return new JsonResponse({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `You have already joined <@${userId}>`,
+          content: `You have already joined`,
           flags: InteractionResponseFlags.EPHEMERAL,
         },
       });
@@ -111,7 +111,7 @@ router.post('/', async (request, env) => {
                 components: [
                   {
                     type: 10,  // ComponentType.TEXT_DISPLAY
-                    content: "# 🏒 What is the “In-Season Cup”?\n- The In-Season Cup is a running “challenge trophy” that is defended and changes hands throughout the regular NHL season and the winner is the team that ends the season with the cup in their possession."
+                    content: "# 🏒 What is the “In-Season Cup”?\nThe In-Season Cup is a running “challenge trophy” that is defended and changes hands throughout the regular NHL season and the winner is the team that ends the season with the cup in their possession."
                   },
                   {
                     type: 1,  // ComponentType.ACTION_ROW
@@ -133,12 +133,12 @@ router.post('/', async (request, env) => {
       case ASSIGN_COMMAND.name.toLowerCase(): {
         //Pull all teams from DB, pull all users from DB
         const res = await server.getUsers(request, env);
-        const assignments = await server.assignTeams(res, request, env);
+        // const assignments = await server.assignTeams(res, request, env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.EPHEMERAL,
-            content: `Assignments ${assignments}`,
+            content: `Assignments ${res[19]}`,
           },
         });
       }
