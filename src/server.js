@@ -78,11 +78,11 @@ router.post('/', async (request, env) => {
     //   });
     // }
     const team = await getRandomTeam();
-    // await server.addItem(interaction.member.user.id, team, false, request, env);
+    await server.addItem(interaction.member.user.id, team, false, request, env);
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `${interaction.member.user.id} ${JSON.stringify(results)} Assigned to ${team}`,
+        content: `${interaction.member.user.id} ${JSON.stringify(res)} Assigned to ${team}`,
         flags: InteractionResponseFlags.EPHEMERAL,
       },
     });
