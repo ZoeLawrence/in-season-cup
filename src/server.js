@@ -68,11 +68,11 @@ router.post('/', async (request, env) => {
     //     },
     //   });
     const res = await server.checkUser(interaction.member.user.id, request, env);
-    if(Object.values(res).includes("username")) {
+    if(res.results != null && res.results.length >= 0 ) {
       return new JsonResponse({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `${res.result[0].results[0].username} assigned to ${res.result[0].results[0].team}`,
+          content: `${res.results[0].username} assigned to ${res.results[0].team}`,
           flags: InteractionResponseFlags.EPHEMERAL,
         },
       });
@@ -82,7 +82,7 @@ router.post('/', async (request, env) => {
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `${res.result[0].results[0]} Assigned to ${team}`,
+        content: `Assigned to ${team}`,
         flags: InteractionResponseFlags.EPHEMERAL,
       },
     });
