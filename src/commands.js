@@ -8,43 +8,50 @@ export const INVITE_COMMAND = {
   description: 'Get an invite link to add the bot to your server',
 };
 
-export const TEST_COMMAND = {
-  name: 'test',
-  description: 'send a hello world with emoji',
-};
-
 export const MATCH_UP_COMMAND = {
   name: 'match-up',
   description: 'next match-up for the in-season cup',
 };
 
-export const SETUP_COMMAND = {
-  name: 'set-up',
-  description: 'set-up the bot for a new season',
+export const JOIN_COMMAND = {
+  name: 'join',
+  description: 'Creates a message where people react to join',
+};
+
+export const ASSIGN_COMMAND = {
+  name: 'group-assign',
+  description: 'Assigns all users to a team and responds posts assignments',
   options: [
     {
-      name: 'assign',
-      description: 'assign teams',
-      type: 1,
-      options: [
-        {
-          name: 'user',
-          description: 'user to assign to team',
-          type: 6,
-          required: true,
-        },
-        {
-          name: 'team',
-          description: 'team to assign user to',
-          type: 8,
-          required: true,
-        },
-         {
-          name: 'champion',
-          description: 'sets whether user is the current champion',
-          type: 5,
-        },
-      ],
+      name: 'current champ',
+      description: 'use 3 letter code (ex: SEA)',
+      type: 6,
+      required: true,
+    },
+  ],
+};
+
+export const START_COMMAND = {
+  name: 'start',
+  description: 'starts the tournament'
+};
+
+export const SWAP_COMMAND = {
+  name: 'swap',
+  description: 'swaps the teams of two users',
+  type: 1,
+  options: [
+    {
+      name: 'player one',
+      description: '',
+      type: 6,
+      required: true,
+    },
+    {
+      name: 'player two',
+      description: '',
+      type: 6,
+      required: true,
     },
   ],
 };

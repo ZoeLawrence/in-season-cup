@@ -7,9 +7,8 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND, SETUP_COMMAND } from './commands.js';
+import { INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
-import { getRandomTeam } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 
 class JsonResponse extends Response {
@@ -80,16 +79,6 @@ router.post('/', async (request, env) => {
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     // Most user commands will come as `APPLICATION_COMMAND`.
     switch (interaction.data.name.toLowerCase()) {
-      case MATCH_UP_COMMAND.name.toLowerCase(): {
-        const currentMatchup = await getCurrentMatchup();
-        return new JsonResponse({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `hello world ${currentMatchup}`,
-          },
-        });
-      }
       case INVITE_COMMAND.name.toLowerCase(): {
         const applicationId = env.DISCORD_APPLICATION_ID;
         const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;
@@ -101,7 +90,17 @@ router.post('/', async (request, env) => {
           },
         });
       }
-      case TEST_COMMAND.name.toLowerCase(): {
+      case MATCH_UP_COMMAND.name.toLowerCase(): {
+        const currentMatchup = await getCurrentMatchup();
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `hello world ${currentMatchup}`,
+          },
+        });
+      }
+      case JOIN_COMMAND.name.toLowerCase(): {
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
@@ -109,11 +108,11 @@ router.post('/', async (request, env) => {
             components: [
               {
                 type: 17,  // ComponentType.CONTAINER
-                accent_color: 703487,
+                accent_color: '68A2B9',
                 components: [
                   {
                     type: 10,  // ComponentType.TEXT_DISPLAY
-                    content: "Join the In Season Cup"
+                    content: "🏒 # What is the “In-Season Cup”?\n- The In-Season Cup is a running “challenge trophy” that is defended and changes hands throughout the regular NHL season and the winner is the team that ends the season with the cup in their possession."
                   },
                   {
                     type: 1,  // ComponentType.ACTION_ROW
@@ -121,7 +120,7 @@ router.post('/', async (request, env) => {
                       {
                         type: 2,  // ComponentType.BUTTON
                         custom_id: "join",
-                        label: "Join",
+                        label: "Join :Pleasee:",
                         style: 1
                       },
                     ]
@@ -132,7 +131,18 @@ router.post('/', async (request, env) => {
           }
         });
       }
-      case SETUP_COMMAND.name.toLowerCase(): {
+      case ASSIGN_COMMAND.name.toLowerCase(): {
+        //Pull all teams from DB, pull all users from DB
+        const assignments = await server.assignTeams(request, env);
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `Assignments: ${assignments}`,
+          },
+        });
+      }
+      case SWAP_COMMAND.name.toLowerCase(): {
         const options = interaction.data.options[0].options;
         const res = await server.addItem(
           options[0].value,
@@ -146,6 +156,16 @@ router.post('/', async (request, env) => {
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
             content: `${JSON.stringify(res)} assign ${options[1].value} to ${options[0].value} and champion as ${options[2].value}`,
+          },
+        });
+      }
+      case START_COMMAND.name.toLowerCase(): {
+        const currentMatchup = await getCurrentMatchup();
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `hello world ${currentMatchup}`,
           },
         });
       }
@@ -183,6 +203,19 @@ async function checkUser(username, request, env) {
   return results;
 }
 
+async function assignTeams(request, env) {
+  const teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
+  const { res } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
+  const assignments = [];
+  const stmt = env.ASSIGN_DB.prepare("INSERT INTO players (team, user_id, isChamp) VALUES (?, ?, false);")
+  for(var i = teamList.length-1;i>=0;i--){
+    const team = teamList.splice(Math.floor(Math.random()*teamList.length), 1);
+    assignments[i] = stmt.bind(team, res.results[i].username);
+  }
+  const { results } = await env.ASSIGN_DB.batch(assignments)
+  return results;
+}
+
 async function addItem(username, team, isChamp, request, env) {
   const { results } = await env.ASSIGN_DB
         .prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?);")
@@ -193,6 +226,7 @@ async function addItem(username, team, isChamp, request, env) {
 
 const server = {
   verifyDiscordRequest,
+  assignTeams,
   addItem,
   checkUser,
   fetch: router.fetch,

@@ -1,4 +1,4 @@
-import { INVITE_COMMAND, MATCH_UP_COMMAND, TEST_COMMAND, SETUP_COMMAND } from './commands.js';
+import { INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND } from './commands.js';
 import dotenv from 'dotenv';
 import process from 'node:process';
 
@@ -34,7 +34,7 @@ const response = await fetch(url, {
     Authorization: `Bot ${token}`,
   },
   method: 'PUT',
-  body: JSON.stringify([MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND, SETUP_COMMAND]),
+  body: JSON.stringify([INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND]),
 });
 
 if (response.ok) {
