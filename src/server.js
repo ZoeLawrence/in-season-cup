@@ -94,6 +94,7 @@ router.post('/', async (request, env) => {
         const options = interaction.data.options[0].options;
         const res = addItem(options[0].value, options[1].value, options[2].value, env);
         // console.log(`options: ${interaction.data.options[0].options[0]}`)
+        console.log(res);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
