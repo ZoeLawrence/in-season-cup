@@ -68,21 +68,21 @@ router.post('/', async (request, env) => {
     //     },
     //   });
     const res = await server.checkUser(interaction.member.user.id, request, env);
-    if(res.results != null && res.results.length > 0 ) {
-      return new JsonResponse({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: `${res.results[0].username} assigned to ${res.results[0].team}`,
-          flags: InteractionResponseFlags.EPHEMERAL,
-        },
-      });
-    }
+    // if(res.results != null && res.results.length > 0 ) {
+    //   return new JsonResponse({
+    //     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    //     data: {
+    //       content: `${res.results[0].username} assigned to ${res.results[0].team}`,
+    //       flags: InteractionResponseFlags.EPHEMERAL,
+    //     },
+    //   });
+    // }
     const team = await getRandomTeam();
-    await server.addItem(interaction.member.user.id, team, false, request, env);
+    // await server.addItem(interaction.member.user.id, team, false, request, env);
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `${interaction.member.user.id} ${JSON.stringify(res)} Assigned to ${team}`,
+        content: `${interaction.member.user.id} ${JSON.stringify(results)} Assigned to ${team}`,
         flags: InteractionResponseFlags.EPHEMERAL,
       },
     });
@@ -191,7 +191,7 @@ async function checkUser(username, request, env) {
         .prepare("SELECT * FROM Persons WHERE username = ?;")
         .bind(username)
         .run();
-  return Response.json(results);
+  return results;
 }
 
 async function addItem(username, team, isChamp, request, env) {
