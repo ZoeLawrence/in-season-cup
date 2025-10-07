@@ -92,7 +92,13 @@ router.post('/', async (request, env) => {
       }
       case SETUP_COMMAND.name.toLowerCase(): {
         const options = interaction.data.options[0].options;
-        const res = addItem(options[0].value, options[1].value, options[2].value, env);
+        const res = await server.addItem(
+          options[0].value,
+          options[1].value,
+          options[2].value,
+          request,
+          env,
+        );
         // console.log(`options: ${interaction.data.options[0].options[0]}`)
         console.log(res);
         return new JsonResponse({
@@ -129,7 +135,7 @@ async function verifyDiscordRequest(request, env) {
   return { interaction: JSON.parse(body), isValid: true };
 }
 
-async function addItem(username, team, isChamp, env) {
+async function addItem(username, team, isChamp, request, env) {
   const { results } = await env.ASSIGN_DB
         .prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?);")
         .bind(username, team, isChamp)
@@ -139,6 +145,7 @@ async function addItem(username, team, isChamp, env) {
 
 const server = {
   verifyDiscordRequest,
+  addItem,
   fetch: router.fetch,
 };
 
