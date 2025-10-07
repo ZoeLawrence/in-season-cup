@@ -112,7 +112,7 @@ router.post('/', async (request, env) => {
                 components: [
                   {
                     type: 10,  // ComponentType.TEXT_DISPLAY
-                    content: "🏒 # What is the “In-Season Cup”?\n- The In-Season Cup is a running “challenge trophy” that is defended and changes hands throughout the regular NHL season and the winner is the team that ends the season with the cup in their possession."
+                    content: "# 🏒 What is the “In-Season Cup”?\n- The In-Season Cup is a running “challenge trophy” that is defended and changes hands throughout the regular NHL season and the winner is the team that ends the season with the cup in their possession."
                   },
                   {
                     type: 1,  // ComponentType.ACTION_ROW
@@ -120,7 +120,7 @@ router.post('/', async (request, env) => {
                       {
                         type: 2,  // ComponentType.BUTTON
                         custom_id: "join",
-                        label: "Join :Pleasee:",
+                        label: "Join",
                         style: 1
                       },
                     ]
@@ -133,12 +133,13 @@ router.post('/', async (request, env) => {
       }
       case ASSIGN_COMMAND.name.toLowerCase(): {
         //Pull all teams from DB, pull all users from DB
-        const assignments = await server.assignTeams(request, env);
+        const { res } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
+        // const assignments = await server.assignTeams(res, request, env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `Assignments: ${assignments}`,
+            content: `Assignments: ${res}`,
           },
         });
       }
@@ -203,9 +204,8 @@ async function checkUser(username, request, env) {
   return results;
 }
 
-async function assignTeams(request, env) {
+async function assignTeams(res, request, env) {
   const teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
-  const { res } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
   const assignments = [];
   const stmt = env.ASSIGN_DB.prepare("INSERT INTO players (team, user_id, isChamp) VALUES (?, ?, false);")
   for(var i = teamList.length-1;i>=0;i--){
