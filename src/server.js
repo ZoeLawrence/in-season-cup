@@ -216,7 +216,11 @@ async function assignTeams(results, request, env) {
   //   assignments[x] = team;
   //   x++;
   // }
-  assignments[x] = stmt.bind(teamList[0], results[0].username);
+  assignments[0] = stmt.bind(teamList[0], results[0].username);
+  assignments[1] = stmt.bind(teamList[1], results[1].username);
+  assignments[2] = stmt.bind(teamList[2], results[2].username);
+  assignments[3] = stmt.bind(teamList[3], results[3].username);
+  assignments[4] = stmt.bind(teamList[4], results[4].username);
   const { res } = await env.ASSIGN_DB.batch(assignments)
   return res;
 }
