@@ -108,7 +108,7 @@ router.post('/', async (request, env) => {
             components: [
               {
                 type: 17,  // ComponentType.CONTAINER
-                accent_color: '68A2B9',
+                accent_color: 703487,
                 components: [
                   {
                     type: 10,  // ComponentType.TEXT_DISPLAY
