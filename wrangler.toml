@@ -16,3 +16,6 @@ enabled = true
 binding = "ASSIGN_DB" # available in your Worker on env.DB
 database_name = "assignments"
 database_id = "390ae039-dc5f-43c3-ae66-0dbb479caf9f"
+
+[env.dev.triggers]
+crons = ["*/5 * * * *"]

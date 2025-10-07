@@ -10,12 +10,7 @@ import {
 } from 'discord-interactions';
 import { INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
-import { 
-  Client, 
-  Events, 
-  GatewayIntentBitsTextDisplayBuilder, 
-  MessageFlags 
-} from 'discord.js';
+import { testAssignments } from './assign.js';
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -30,17 +25,9 @@ class JsonResponse extends Response {
 }
 
 const router = AutoRouter();
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
 
 router.get('/', (request, env) => {
-  client.once(Events.ClientReady, (readyClient) => {
-    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-  });
-  client.login(env.DISCORD_TOKEN);
-  const channel = client.channels.cache.get('id');
-  channel.send('content');
-  return new Response(`👋 ${channel}`);
+  return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
 });
 
 /**
@@ -241,12 +228,17 @@ async function addItem(username, team, isChamp, request, env) {
   return results;
 }
 
+async function scheduled(controller, env, ctx) {
+  ctx.waitUntil(testAssignments(env));
+}
+
 const server = {
   verifyDiscordRequest,
   getUsers,
   assignTeams,
   addItem,
   checkUser,
+  scheduled,
   fetch: router.fetch,
 };
 
