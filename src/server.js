@@ -40,7 +40,7 @@ router.get('/', (request, env) => {
   client.login(env.DISCORD_TOKEN);
   const channel = client.channels.cache.get('id');
   channel.send('content');
-  return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
+  return new Response(`👋 ${channel}`);
 });
 
 /**
