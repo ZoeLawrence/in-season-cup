@@ -1,7 +1,6 @@
 /**
  * The core server that runs on a Cloudflare worker.
  */
-
 import { AutoRouter } from 'itty-router';
 import {
   InteractionResponseType,
@@ -12,6 +11,7 @@ import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND, SETUP_COMMAND } from '.
 import { getCurrentMatchup } from './nhl.js';
 import { getRandomEmoji } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
+import { addItem } from './dynamodb.js';
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -92,12 +92,9 @@ router.post('/', async (request, env) => {
         });
       }
       case SETUP_COMMAND.name.toLowerCase(): {
+        addItem(options[0].value, options[1].value, options[2].value);
         const options = interaction.data.options[0].options;
-        console.log(`options: ${interaction.data.options[0].options[0]}`)
-        // let text = `test interactions`; 
-        // for(let i = 0; i < 3; i++) {
-        //   text += ` opt value ${i} is ${options[i].value}`;
-        // }
+        // console.log(`options: ${interaction.data.options[0].options[0]}`)
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
