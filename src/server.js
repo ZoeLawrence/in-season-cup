@@ -25,6 +25,7 @@ class JsonResponse extends Response {
 }
 
 const router = AutoRouter();
+const numOfTeams = 32;
 
 /**
  * A simple :wave: hello page to verify the worker is working.
@@ -57,7 +58,20 @@ router.post('/', async (request, env) => {
   }
 
   if(interaction.type == InteractionType.MESSAGE_COMPONENT) {
+    // check if they are already
+    const res = await server.checkUser(interaction.user.id, request, env);
+    const results = res.result[0].results[0]
+    if(Object.values(results).includes("username")) {
+      return new JsonResponse({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `${results.username} assigned to ${results.team}`,
+          flags: InteractionResponseFlags.EPHEMERAL,
+        },
+      });
+    }
     const team = await getRandomTeam();
+    const res2 = await server.addItem(interaction.user.id, team, false, request, env);
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
@@ -131,8 +145,7 @@ router.post('/', async (request, env) => {
           request,
           env,
         );
-        // console.log(`options: ${interaction.data.options[0].options[0]}`)
-        console.log(res);
+        console.log(`res: ${res}`);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
@@ -167,17 +180,26 @@ async function verifyDiscordRequest(request, env) {
   return { interaction: JSON.parse(body), isValid: true };
 }
 
+async function checkUser(username, request, env) {
+  const { results } = await env.ASSIGN_DB
+        .prepare("SELECT * FROM Persons WHERE username = ?")
+        .bind(username)
+        .run();
+  return JSON.parse(Response.json(results));
+}
+
 async function addItem(username, team, isChamp, request, env) {
   const { results } = await env.ASSIGN_DB
         .prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?);")
         .bind(username, team, isChamp)
         .run();
-  return Response.json(results);
+  return JSON.parse(Response.json(results));
 }
 
 const server = {
   verifyDiscordRequest,
   addItem,
+  checkUser,
   fetch: router.fetch,
 };
 
