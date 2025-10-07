@@ -82,7 +82,7 @@ router.post('/', async (request, env) => {
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `Assigned to ${team}`,
+        content: `${res.result[0].results[0]} Assigned to ${team}`,
         flags: InteractionResponseFlags.EPHEMERAL,
       },
     });
