@@ -138,7 +138,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.EPHEMERAL,
-            content: `Assignments ${res}`,
+            content: `Assignments ${res[0].username}`,
           },
         });
       }
