@@ -133,7 +133,7 @@ router.post('/', async (request, env) => {
       }
       case ASSIGN_COMMAND.name.toLowerCase(): {
         //Pull all teams from DB, pull all users from DB
-        const { res } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
+        const res = await getUsers(request, env);
         // const assignments = await server.assignTeams(res, request, env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -216,6 +216,13 @@ async function assignTeams(res, request, env) {
   return results;
 }
 
+async function getUsers(request, env) {
+  const { results } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
+  return results;
+}
+
+const { res } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
+
 async function addItem(username, team, isChamp, request, env) {
   const { results } = await env.ASSIGN_DB
         .prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?);")
@@ -226,6 +233,7 @@ async function addItem(username, team, isChamp, request, env) {
 
 const server = {
   verifyDiscordRequest,
+  getUsers,
   assignTeams,
   addItem,
   checkUser,
