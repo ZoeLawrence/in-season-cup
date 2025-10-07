@@ -25,7 +25,6 @@ class JsonResponse extends Response {
 }
 
 const router = AutoRouter();
-const numOfTeams = 32;
 
 /**
  * A simple :wave: hello page to verify the worker is working.
@@ -58,31 +57,21 @@ router.post('/', async (request, env) => {
   }
 
   if(interaction.type == InteractionType.MESSAGE_COMPONENT) {
-    // check if they are already
-    // const results = await server.checkUser(interaction.member.user.id, request, env);
-    // return new JsonResponse({
-    //     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //     data: {
-    //       content: `${results} assigned to`,
-    //       flags: InteractionResponseFlags.EPHEMERAL,
-    //     },
-    //   });
     const results = await server.checkUser(interaction.member.user.id, request, env);
-    if(results != null && results.length > 0 ) {
+    if(results != null && results.length > 0) {
       return new JsonResponse({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `${results[0].username} assigned to ${results[0].team}`,
+          content: `You have already joined`,
           flags: InteractionResponseFlags.EPHEMERAL,
         },
       });
     }
-    const team = await getRandomTeam();
-    await server.addItem(interaction.member.user.id, team, false, request, env);
+    await server.addItem(interaction.member.user.id, '', false, request, env);
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `Assigned to ${team}`,
+        content: `Thank you for joining`,
         flags: InteractionResponseFlags.EPHEMERAL,
       },
     });
@@ -199,7 +188,7 @@ async function addItem(username, team, isChamp, request, env) {
         .prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?);")
         .bind(username, team, isChamp)
         .run();
-  return Response.json(results);
+  return results;
 }
 
 const server = {
