@@ -130,8 +130,8 @@ async function verifyDiscordRequest(request, env) {
 
 async function addItem(username, team, isChamp, env) {
   const { results } = await env.ASSIGN_DB
-        .prepare(`INSERT INTO Persons (username, team, isChamp) VALUES (${username}, ${team}, ${isChamp});`)
-        .bind("assign")
+        .prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?});")
+        .bind(username, team, isChamp)
         .run();
   return Response.json(results);
 }
