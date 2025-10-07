@@ -3,13 +3,19 @@
  */
 import { AutoRouter } from 'itty-router';
 import {
+  InteractionResponseFlags,
   InteractionResponseType,
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
 import { INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
-import { InteractionResponseFlags } from 'discord-interactions';
+import { 
+  Client, 
+  Events, 
+  GatewayIntentBitsTextDisplayBuilder, 
+  MessageFlags 
+} from 'discord.js';
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -24,11 +30,14 @@ class JsonResponse extends Response {
 }
 
 const router = AutoRouter();
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-/**
- * A simple :wave: hello page to verify the worker is working.
- */
+
 router.get('/', (request, env) => {
+  client.once(Events.ClientReady, (readyClient) => {
+    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+  });
+  client.login(env.DISCORD_TOKEN);
   return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
 });
 
@@ -38,9 +47,14 @@ router.get('/', (request, env) => {
  * https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
  */
 router.post('/', async (request, env) => {
-  // console.log(request);
-  await testAssignments(env);
-  
+  const exampleTextDisplay = new TextDisplayBuilder().setContent(
+    'This text is inside a Text Display component! You can use **any __markdown__** available inside this component too.',
+  );
+  const channel = client.channels.cache.get('id');
+  await channel.send({
+    components: [exampleTextDisplay],
+    flags: MessageFlags.IsComponentsV2,
+  });
   const { isValid, interaction } = await server.verifyDiscordRequest(
     request,
     env,
@@ -58,17 +72,18 @@ router.post('/', async (request, env) => {
   }
 
   if(interaction.type == InteractionType.MESSAGE_COMPONENT) {
-    const results = await server.checkUser(interaction.member.user.id, request, env);
+    const userId = interaction.member.user.id
+    const results = await server.checkUser(userId, request, env);
     if(results != null && results.length > 0) {
       return new JsonResponse({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `You have already joined`,
+          content: `You have already joined <@${userId}>`,
           flags: InteractionResponseFlags.EPHEMERAL,
         },
       });
     }
-    await server.addItem(interaction.member.user.id, '', false, request, env);
+    await server.addItem(userId, '', false, request, env);
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {

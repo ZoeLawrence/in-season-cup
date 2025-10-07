@@ -19,10 +19,6 @@ export async function testAssignments(env) {
     );
     }
 
-    /**
-     * Register all commands globally.  This can take o(minutes), so wait until
-     * you're sure these are the commands you want.
-     */
     const url = `https://discord.com/api/v10/channels/${channelId}/messages`;
 
     const response = await fetch(url, {
