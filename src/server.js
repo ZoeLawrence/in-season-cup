@@ -92,13 +92,13 @@ router.post('/', async (request, env) => {
       }
       case SETUP_COMMAND.name.toLowerCase(): {
         const options = interaction.data.options[0].options;
-        const res = addItem(options[0].value, options[1].value, options[2].value);
+        const res = addItem(options[0].value, options[1].value, options[2].value, env);
         // console.log(`options: ${interaction.data.options[0].options[0]}`)
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `${res} assign ${options[1].value} to ${options[0].value} and champion as ${options[2].value}`,
+            content: `${JSON.stringify(res)} assign ${options[1].value} to ${options[0].value} and champion as ${options[2].value}`,
           },
         });
       }
@@ -128,7 +128,7 @@ async function verifyDiscordRequest(request, env) {
   return { interaction: JSON.parse(body), isValid: true };
 }
 
-async function addItem(username, team, isChamp) {
+async function addItem(username, team, isChamp, env) {
   const { results } = await env.ASSIGN_DB
         .prepare(`INSERT INTO Persons (username, team, isChamp) VALUES (${username}, ${team}, ${isChamp});`)
         .bind("assign")
