@@ -95,23 +95,31 @@ router.post('/', async (request, env) => {
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            flags: 32768,
             components: [
               {
-                type: 10,
-                content: "# Join the In Season Cup"
-              },
-              {
-                type: 1,
-                components: [{
-                  type: 2,
-                  custom_id: "join",
-                  label: "Join",
-                  style: 1
-                }],
+                type: 17,  // ComponentType.CONTAINER
+                accent_color: 703487,
+                components: [
+                  {
+                    type: 10,  // ComponentType.TEXT_DISPLAY
+                    content: "# Join the In Season Cup"
+                  },
+                  {
+                    type: 1,  // ComponentType.ACTION_ROW
+                    components: [
+                      {
+                        type: 2,  // ComponentType.BUTTON
+                        custom_id: "join",
+                        label: "Join",
+                        style: 1
+                      },
+                    ]
+                  }
+                ]
               }
-            ],
-          },
+            ]
+          }
         });
       }
       case SETUP_COMMAND.name.toLowerCase(): {
