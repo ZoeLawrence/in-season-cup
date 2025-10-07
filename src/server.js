@@ -68,7 +68,7 @@ router.post('/', async (request, env) => {
     //     },
     //   });
     const res = await server.checkUser(interaction.member.user.id, request, env);
-    if(res.results != null && res.results.length >= 0 ) {
+    if(res.results != null && res.results.length > 0 ) {
       return new JsonResponse({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -82,7 +82,7 @@ router.post('/', async (request, env) => {
     return new JsonResponse({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `Assigned to ${team}`,
+        content: `${res.results[0]} Assigned to ${team}`,
         flags: InteractionResponseFlags.EPHEMERAL,
       },
     });
