@@ -11,9 +11,6 @@ import { MATCH_UP_COMMAND, INVITE_COMMAND, TEST_COMMAND, SETUP_COMMAND } from '.
 import { getCurrentMatchup } from './nhl.js';
 import { getRandomEmoji } from './emoji.js';
 import { InteractionResponseFlags } from 'discord-interactions';
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import process from 'node:process';
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -27,16 +24,6 @@ class JsonResponse extends Response {
   }
 }
 
-const config = {
-	region: 'us-east-2',
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-}
-
-const client = new DynamoDBClient(config);
-const docClient = DynamoDBDocumentClient.from(client);
 const router = AutoRouter();
 
 /**
@@ -142,15 +129,11 @@ async function verifyDiscordRequest(request, env) {
 }
 
 async function addItem(username, team, isChamp) {
-  const putCommand = new PutCommand({
-    TableName: "assignments",
-    Item: {
-      username: username,
-      team: team,
-      isChamp: isChamp,
-    },
-  });
-  await docClient.send(putCommand);
+  const { results } = await env.ASSIGN_DB
+        .prepare(`INSERT INTO Persons (username, team, isChamp) VALUES (${username}, ${team}, ${isChamp});`)
+        .bind("assign")
+        .run();
+  return Response.json(results);
 }
 
 const server = {

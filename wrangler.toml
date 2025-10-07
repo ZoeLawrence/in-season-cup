@@ -11,3 +11,8 @@ compatibility_date="2023-05-18"
 
 [observability.logs]
 enabled = true
+
+[[d1_databases]]
+binding = "ASSIGN_DB" # available in your Worker on env.DB
+database_name = "assignments"
+database_id = "390ae039-dc5f-43c3-ae66-0dbb479caf9f"
