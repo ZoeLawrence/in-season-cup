@@ -212,8 +212,8 @@ async function assignTeams(res, request, env) {
     const team = teamList.splice(Math.floor(Math.random()*teamList.length), 1);
     assignments[i] = stmt.bind(team, res.results[i].username);
   }
-  const { results } = await env.ASSIGN_DB.batch(assignments)
-  return results;
+  // const { results } = await env.ASSIGN_DB.batch(assignments)
+  return assignments;
 }
 
 async function getUsers(request, env) {
