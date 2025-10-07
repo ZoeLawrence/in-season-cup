@@ -132,13 +132,13 @@ router.post('/', async (request, env) => {
       }
       case ASSIGN_COMMAND.name.toLowerCase(): {
         //Pull all teams from DB, pull all users from DB
-        const res = await server.getUsers(request, env);
-        // const assignments = await server.assignTeams(res, request, env);
+        const results = await server.getUsers(request, env);
+        const assignments = await server.assignTeams(results, request, env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.EPHEMERAL,
-            content: `Assignments ${res[0].username}`,
+            content: `Assignments ${assignments}`,
           },
         });
       }
@@ -203,14 +203,14 @@ async function checkUser(username, request, env) {
   return results;
 }
 
-async function assignTeams(res, request, env) {
+async function assignTeams(results, request, env) {
   const teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
   const stmt = env.ASSIGN_DB.prepare("INSERT INTO players (team, user_id, isChamp) VALUES (?, ?, false);")
   const assignments = [];
   let x = 0;
   for(var i = teamList.length-1;i>=0;i--){
     const team = teamList.splice(Math.floor(Math.random()*teamList.length), 1);
-    assignments[x] = stmt.bind(team, res[x+1].username);
+    assignments[x] = stmt.bind(team, results[x].username);
     x++;
   }
   // const { results } = await env.ASSIGN_DB.batch(assignments)
