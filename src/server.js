@@ -209,9 +209,7 @@ async function assignTeams(results, request, env) {
   let x = 0;
   const stmt  = env.ASSIGN_DB.prepare("INSERT INTO players (team, user_id, isChamp) VALUES (?, ?, false);")
   while(teamList.length) {
-    const team = teamList.splice(Math.floor(Math.random()*teamList.length), 1);
-    const user_id = results[x].username;
-    assignments[x] = stmt.bind(team, user_id);
+    assignments[x] = stmt.bind(teamList.splice(teamList.length * Math.random() | 0, 1)[0], results[x].username);
     x++;
   }
   const { res } = await env.ASSIGN_DB.batch(assignments)
