@@ -142,7 +142,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.EPHEMERAL,
-            content: `# Teams \n ${assignments}`,
+            content: `# Teams \n ${toPrint}`,
           },
         });
       }
