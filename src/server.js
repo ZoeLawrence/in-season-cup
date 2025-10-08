@@ -208,7 +208,7 @@ async function assignTeams(results, request, env) {
   let assignments = [];
   let x = 0;
   const stmt  = env.ASSIGN_DB.prepare("INSERT INTO players (team, user_id, isChamp) VALUES (?, ?, false);")
-  for(var i = teamList.length; i > 0; i--){
+  while(teamList.length) {
     const team = teamList.splice(Math.floor(Math.random()*teamList.length), 1);
     const user_id = results[x].username;
     assignments[x] = stmt.bind(team, user_id);
