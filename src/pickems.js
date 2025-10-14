@@ -31,8 +31,21 @@ export async function getPickEms() {
 		const awayTeam = game.awayTeam.name.default;
 		const homeTeam = game.homeTeam.name.default;
 		games[i + 1] = {
-			type: 10,  // ComponentType.TEXT_DISPLAY
-			content: `${homeTeam} vs ${awayTeam}\n`
+			type: 1,  // ComponentType.ACTION_ROW
+			components: [
+				{
+					type: 2,  // ComponentType.BUTTON
+					custom_id: `select-${homeTeam}`,
+					label: `${homeTeam}`,
+					style: 1
+				},
+				{
+					type: 2,  // ComponentType.BUTTON
+					custom_id: `select-${awayTeam}`,
+					label: `${awayTeam}`,
+					style: 1
+				},
+			]
 		}
 	}
 //   const posts = data.games.children
