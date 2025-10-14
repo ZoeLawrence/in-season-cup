@@ -11,7 +11,7 @@ import {
 import { INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND, PICKEMS_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
 import { testAssignments } from './assign.js';
-import { getPickEms } from './pickems.js'
+import { getPickEms } from './pickems.js';
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -175,12 +175,12 @@ router.post('/', async (request, env) => {
         });
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
-        const getPickEms = await getPickEms();
+        const pickemsResult = await getPickEms();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: getPickEms,
+            content: pickemsResult,
           },
         });
       }
