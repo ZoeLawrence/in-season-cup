@@ -20,14 +20,21 @@ export async function getPickEms() {
    		throw new Error(errorText);
   	}
 	const data = await response.json();
-	let text = `# Games Today\n`;
-	text += `${data.games[0].awayTeam.name.default}\n`;
-	// for (let i = 0; i < data.games.length; i++) {
-	// 	const game = data.games[i];
-	// 	const awayTeam = game.awayTeam.commonName.default;
-	// 	const homeTeam = game.homeTeam.commonName.default;
-	// 	text += `${homeTeam} vs ${awayTeam}\n`
-	// }
+	// let text = `# Games Today\n`;
+	let games = [];
+	games[0] = {
+		type: 10,  // ComponentType.TEXT_DISPLAY
+		content: `# Games Today\n`
+	}
+	for (let i = 0; i < data.games.length; i++) {
+		const game = data.games[i];
+		const awayTeam = game.awayTeam.name.default;
+		const homeTeam = game.homeTeam.name.default;
+		games[i + 1] = {
+			type: 10,  // ComponentType.TEXT_DISPLAY
+			content: `${homeTeam} vs ${awayTeam}\n`
+		}
+	}
 //   const posts = data.games.children
 //     .map((post) => {
 //       if (post.is_gallery) {
@@ -42,5 +49,5 @@ export async function getPickEms() {
 //     .filter((post) => !!post);
 //   const randomIndex = Math.floor(Math.random() * posts.length);
 //   const randomPost = posts[randomIndex];
-	return text;
+	return games;
 }
