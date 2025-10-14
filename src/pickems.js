@@ -17,11 +17,11 @@ export async function getPickEms() {
     	} catch {
       	// ignore
     	}
-		return errorText;
-   		// throw new Error(errorText);
+   		throw new Error(errorText);
   	}
 	const data = await response.json();
 	let text = `# Games Today\n`;
+	text += `${data.games[0].awayTeam.commonName.default}\n`;
 	// for (let i = 0; i < data.games.length; i++) {
 	// 	const game = data.games[i];
 	// 	const awayTeam = game.awayTeam.commonName.default;
