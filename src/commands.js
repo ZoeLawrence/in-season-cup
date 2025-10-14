@@ -28,6 +28,11 @@ export const START_COMMAND = {
   description: 'starts the tournament',
 };
 
+export const PICKEMS_COMMAND = {
+  name: 'pick-ems',
+  description: 'starts a game of pickems'
+}
+
 export const SWAP_COMMAND = {
   name: 'swap',
   description: 'swaps the teams of two users',

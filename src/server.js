@@ -8,9 +8,10 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import { INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND } from './commands.js';
+import { INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, SWAP_COMMAND, PICKEMS_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './nhl.js';
 import { testAssignments } from './assign.js';
+import { getPickEms } from './pickems.js'
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -142,7 +143,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `# Teams \n ${toPrint}`,
+            content: `# Teams\n${toPrint}`,
           },
         });
       }
@@ -170,6 +171,16 @@ router.post('/', async (request, env) => {
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
             content: `hello world ${currentMatchup}`,
+          },
+        });
+      }
+      case PICKEMS_COMMAND.name.toLowerCase(): {
+        const getPickEms = await getPickEms();
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: getPickEms,
           },
         });
       }
