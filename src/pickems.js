@@ -31,12 +31,23 @@ export async function getPickEms() {
 		const awayTeam = game.awayTeam.name.default;
 		const homeTeam = game.homeTeam.name.default;
 		games[i + 1] = {
-			type: 9,  // ComponentType.SECTION
-			// accent_color: 703487,
+			type: 17,  // ComponentType.CONTAINER
+			accent_color: 703487,
 			components: [
 				{
-					type: 10,  // ComponentType.TEXT_DISPLAY
-					content: `${homeTeam} vs ${awayTeam}`
+					type: 9,
+					components: [
+						{
+							type: 10,  // ComponentType.TEXT_DISPLAY
+							content: `${homeTeam} vs ${awayTeam}`
+						},
+					],
+					accessory: {
+						type: 11,  // ComponentType.THUMBNAIL
+						media: {
+							url: game.homeTeam.logo
+						}
+					}
 				},
 				{
 					type: 1,  // ComponentType.ACTION_ROW
@@ -55,15 +66,9 @@ export async function getPickEms() {
 						},
 					],
 				}
-			],
-			accessory: {
-				type: 11,  // ComponentType.THUMBNAIL
-				media: {
-					url: game.homeTeam.logo
-				}
-			}
+			]
 		}
-	}
+	}		
 //   const posts = data.games.children
 //     .map((post) => {
 //       if (post.is_gallery) {
