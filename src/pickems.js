@@ -24,7 +24,7 @@ export async function getPickEms() {
 		const game = data.games[i];
 		const awayTeam = game.awayTeam.commonName.default;
 		const homeTeam = game.homeTeam.commonName.default;
-		text += `${currentChamp} vs ${awayTeam}\n`
+		text += `${homeTeam} vs ${awayTeam}\n`
 	}
 //   const posts = data.games.children
 //     .map((post) => {
@@ -42,5 +42,3 @@ export async function getPickEms() {
 //   const randomPost = posts[randomIndex];
 	return text;
 }
-
-export const nextGame = `https://api-web.nhle.com/v1/schedule/${year}-${month}-${day}`;
