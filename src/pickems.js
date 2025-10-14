@@ -16,7 +16,8 @@ export async function getPickEms() {
     	} catch {
       	// ignore
     	}
-   		throw new Error(errorText);
+		return errorText;
+   		// throw new Error(errorText);
   	}
 	const data = await response.json();
 	let text = `# Games Today\n`;
