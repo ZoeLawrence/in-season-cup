@@ -22,12 +22,12 @@ export async function getPickEms() {
   	}
 	const data = await response.json();
 	let text = `# Games Today\n`;
-	for (let i = 0; i < data.games.length; i++) {
-		const game = data.games[i];
-		const awayTeam = game.awayTeam.commonName.default;
-		const homeTeam = game.homeTeam.commonName.default;
-		text += `${homeTeam} vs ${awayTeam}\n`
-	}
+	// for (let i = 0; i < data.games.length; i++) {
+	// 	const game = data.games[i];
+	// 	const awayTeam = game.awayTeam.commonName.default;
+	// 	const homeTeam = game.homeTeam.commonName.default;
+	// 	text += `${homeTeam} vs ${awayTeam}\n`
+	// }
 //   const posts = data.games.children
 //     .map((post) => {
 //       if (post.is_gallery) {
