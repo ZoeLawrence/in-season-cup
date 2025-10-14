@@ -25,27 +25,43 @@ export async function getPickEms() {
 	games[0] = {
 		type: 10,  // ComponentType.TEXT_DISPLAY
 		content: `# Games Today\n`
-	}
+	}	
 	for (let i = 0; i < data.games.length; i++) {
 		const game = data.games[i];
 		const awayTeam = game.awayTeam.name.default;
 		const homeTeam = game.homeTeam.name.default;
 		games[i + 1] = {
-			type: 1,  // ComponentType.ACTION_ROW
+			type: 17,  // ComponentType.CONTAINER
+			accent_color: 703487,
 			components: [
 				{
-					type: 2,  // ComponentType.BUTTON
-					custom_id: `select-${homeTeam}`,
-					label: `${homeTeam}`,
-					style: 1
+					type: 10,  // ComponentType.TEXT_DISPLAY
+					content: `${homeTeam} vs ${awayTeam}`
 				},
 				{
-					type: 2,  // ComponentType.BUTTON
-					custom_id: `select-${awayTeam}`,
-					label: `${awayTeam}`,
-					style: 1
-				},
-			]
+					type: 1,  // ComponentType.ACTION_ROW
+					components: [
+						{
+							type: 2,  // ComponentType.BUTTON
+							custom_id: `select-${homeTeam}`,
+							label: `${homeTeam}`,
+							style: 1
+						},
+						{
+							type: 2,  // ComponentType.BUTTON
+							custom_id: `select-${awayTeam}`,
+							label: `${awayTeam}`,
+							style: 1
+						},
+					],
+				}
+			],
+			accessory: {
+				type: 11,  // ComponentType.THUMBNAIL
+				media: {
+					url: game.homeTeam.logo
+				}
+			}
 		}
 	}
 //   const posts = data.games.children
