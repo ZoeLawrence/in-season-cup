@@ -31,8 +31,8 @@ export async function getPickEms() {
 		const awayTeam = game.awayTeam.name.default;
 		const homeTeam = game.homeTeam.name.default;
 		games[i + 1] = {
-			type: 17,  // ComponentType.CONTAINER
-			accent_color: 703487,
+			type: 9,  // ComponentType.SECTION
+			// accent_color: 703487,
 			components: [
 				{
 					type: 10,  // ComponentType.TEXT_DISPLAY
