@@ -1,3 +1,8 @@
+export async function getRandomTeam() {
+  const teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
+  return teamList[Math.floor(Math.random() * teamList.length)];
+}
+
 export async function getCurrentMatchup() {
   const response = await fetch(nextGame);
   if (!response.ok) {
