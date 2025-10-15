@@ -179,13 +179,13 @@ router.post('/', async (request, env) => {
         const homeTeam = game_data.homeTeam.commonName.default;
         const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
         await server.updateCurrentMatch(game_data.game_id, game_data.game_time, env);
-        let textContent = `# Welcome to the In Season Cup\n Current champ is <@${results[0].user_id}\n`
+        let textContent = `# Current champ is <@${results[0].user_id}>\n`
         if(winnerIsHome) {
           const away = await server.getUser(game_data.awayTeam.abbrev, env);
-          textContent += `Next match up is <@${away.user_id}>'s ${awayTeam} faces <@${results[0].user_id}'s ${homeTeam}`;
+          textContent += `Next match up is <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}'s ${homeTeam}`;
         } else {
           const home = await server.getUser(game_data.homeTeam.abbrev, env);
-          textContent += `Next match up is <@${home.user_id}>'s ${homeTeam} faces <@${results[0].user_id}'s ${awayTeam}`;
+          textContent += `Next match up is <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
         }
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
