@@ -178,7 +178,7 @@ router.post('/', async (request, env) => {
         const awayTeam = game_data.awayTeam.commonName.default;
         const homeTeam = game_data.homeTeam.commonName.default;
         const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
-        await server.updateCurrentMatch(game_data.game_id, game_data.game_time, env);
+        await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
         let textContent = `# Current champ is <@${results[0].user_id}>\n`
         if(winnerIsHome) {
           const away = await server.getUser(game_data.awayTeam.abbrev, env);
@@ -207,19 +207,12 @@ router.post('/', async (request, env) => {
         });
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
-        // const pickemsResult = await getPickEms();
-        const results = await server.updateCurrentMatch2(env);
-        let text = `it is: `
-        if(results[0] == undefined) {
-          text += `undefined`
-        } else {
-          text += `exists~!`
-        }
+        const pickemsResult = await getPickEms();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: text
+            content: pickemsResult
           }
         });
       }
@@ -432,17 +425,10 @@ async function addItem(username, team, isChamp, request, env) {
   return results;
 }
 
-async function updateCurrentMatch(game_id, game_time, env) {
+async function createFirstMatch(game_id, game_time, env) {
   const { results } = await env.ASSIGN_DB
         .prepare("INSERT INTO current (game_id, time) VALUES (?, ?);")
         .bind(game_id, game_time)
-        .run();
-  return results;
-}
-
-async function updateCurrentMatch2(env) {
-  const { results } = await env.ASSIGN_DB
-        .prepare("SELECT * FROM current;")
         .run();
   return results;
 }
@@ -459,8 +445,7 @@ const server = {
   addItem,
   checkUser,
   scheduled,
-  updateCurrentMatch,
-  updateCurrentMatch2,
+  createFirstMatch,
   getUser,
   fetch: router.fetch,
 };

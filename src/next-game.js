@@ -4,6 +4,16 @@ export async function testAssignments(env) {
     const { results } = await env.ASSIGN_DB
         .prepare("SELECT * FROM players WHERE isChamp = 1;")
         .run();
+
+//    const { results } = await env.ASSIGN_DB
+//         .prepare("SELECT * FROM current;")
+//         .run();
+//     let text = `it is: `
+//     if(results[0] == undefined) {
+//         text += `undefined`
+//     } else {
+//         text += `exists~!`
+//     }
     const game_data = await getCurrentMatchup(results[0].team, env);
     const awayTeam = game_data.awayTeam.commonName.default;
     const homeTeam = game_data.homeTeam.commonName.default;
