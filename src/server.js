@@ -78,112 +78,106 @@ router.post('/', async (request, env) => {
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     // Most user commands will come as `APPLICATION_COMMAND`.
-    return new JsonResponse({
+    switch (interaction.data.name.toLowerCase()) {
+      case INVITE_COMMAND.name.toLowerCase(): {
+        const applicationId = env.DISCORD_APPLICATION_ID;
+        const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: INVITE_URL,
+            flags: InteractionResponseFlags.EPHEMERAL,
+          },
+        });
+      }
+      case JOIN_COMMAND.name.toLowerCase(): {
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: 32768,
+            components: [
+              {
+                type: 17,  // ComponentType.CONTAINER
+                accent_color: 703487,
+                components: [
+                  {
+                    type: 10,  // ComponentType.TEXT_DISPLAY
+                    content: "# 🏒 What is the “In-Season Cup”?\nThe In-Season Cup is a running “challenge trophy” that is defended and changes hands throughout the regular NHL season and the winner is the team that ends the season with the cup in their possession."
+                  },
+                  {
+                    type: 1,  // ComponentType.ACTION_ROW
+                    components: [
+                      {
+                        type: 2,  // ComponentType.BUTTON
+                        custom_id: "join",
+                        label: "Join",
+                        style: 1
+                      },
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        });
+      }
+      case ASSIGN_COMMAND.name.toLowerCase(): {
+        //Pull all teams from DB, pull all users from DB
+        const results = await server.getUsers(request, env);
+        const assignments = await server.assignTeams(results, request, env);
+        let toPrint = ``;
+        for(let i = 0; i < assignments.length; i++) {
+          toPrint += `${assignments[i].team} - <@${assignments[i].id}>\n`;
+        }
+        return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `command name: ${interaction.data.name.toLowerCase()} ${interaction.data.options[0].name.toLowerCase()}`,
+            content: `# Teams\n${toPrint}`,
           },
         });
-    // switch (interaction.data.name.toLowerCase()) {
-    //   case INVITE_COMMAND.name.toLowerCase(): {
-    //     const applicationId = env.DISCORD_APPLICATION_ID;
-    //     const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;
-    //     return new JsonResponse({
-    //       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //       data: {
-    //         content: INVITE_URL,
-    //         flags: InteractionResponseFlags.EPHEMERAL,
-    //       },
-    //     });
-    //   }
-    //   case JOIN_COMMAND.name.toLowerCase(): {
-    //     return new JsonResponse({
-    //       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //       data: {
-    //         flags: 32768,
-    //         components: [
-    //           {
-    //             type: 17,  // ComponentType.CONTAINER
-    //             accent_color: 703487,
-    //             components: [
-    //               {
-    //                 type: 10,  // ComponentType.TEXT_DISPLAY
-    //                 content: "# 🏒 What is the “In-Season Cup”?\nThe In-Season Cup is a running “challenge trophy” that is defended and changes hands throughout the regular NHL season and the winner is the team that ends the season with the cup in their possession."
-    //               },
-    //               {
-    //                 type: 1,  // ComponentType.ACTION_ROW
-    //                 components: [
-    //                   {
-    //                     type: 2,  // ComponentType.BUTTON
-    //                     custom_id: "join",
-    //                     label: "Join",
-    //                     style: 1
-    //                   },
-    //                 ]
-    //               }
-    //             ]
-    //           }
-    //         ]
-    //       }
-    //     });
-    //   }
-    //   case ASSIGN_COMMAND.name.toLowerCase(): {
-    //     //Pull all teams from DB, pull all users from DB
-    //     const results = await server.getUsers(request, env);
-    //     const assignments = await server.assignTeams(results, request, env);
-    //     let toPrint = ``;
-    //     for(let i = 0; i < assignments.length; i++) {
-    //       toPrint += `${assignments[i].team} - <@${assignments[i].id}>\n`;
-    //     }
-    //     return new JsonResponse({
-    //       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //       data: {
-    //         flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-    //         content: `# Teams\n${toPrint}`,
-    //       },
-    //     });
-    //   }
-    //   case SWAP_COMMAND.name.toLowerCase(): {
-    //     const options = interaction.data.options[0].options;
-    //     const res = await server.addItem(
-    //       options[0].value,
-    //       options[1].value,
-    //       options[2].value,
-    //       request,
-    //       env,
-    //     );
-    //     return new JsonResponse({
-    //       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //       data: {
-    //         flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-    //         content: `${JSON.stringify(res)} assign ${options[1].value} to ${options[0].value} and champion as ${options[2].value}`,
-    //       },
-    //     });
-    //   }
-    //   case START_COMMAND.name.toLowerCase(): {
-    //     const currentMatchup = await getCurrentMatchup();
-    //     return new JsonResponse({
-    //       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //       data: {
-    //         flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-    //         content: `hello world ${currentMatchup}`,
-    //       },
-    //     });
-    //   }
-    //   case PICKEMS_COMMAND.name.toLowerCase(): {
-    //     const pickemsResult = await getPickEms();
-    //     return new JsonResponse({
-    //       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //       data: {
-    //         flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-    //         components: pickemsResult
-    //       }
-    //     });
-    //   }
-    //   default:
-    //     return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
-    // }
+      }
+      case REASSIGN_COMMAND.name.toLowerCase(): {
+        let test =  `command name: ${interaction.data.name.toLowerCase()} ${interaction.data.options[0].name.toLowerCase()}`;
+        const options = interaction.data.options[0].options;
+        const res = await server.addItem(
+          options[0].value,
+          options[1].value,
+          options[2].value,
+          request,
+          env,
+        );
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `${JSON.stringify(res)} assign ${options[1].value} to ${options[0].value} and champion as ${options[2].value}`,
+          },
+        });
+      }
+      case START_COMMAND.name.toLowerCase(): {
+        const currentMatchup = await getCurrentMatchup();
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `hello world ${currentMatchup}`,
+          },
+        });
+      }
+      case PICKEMS_COMMAND.name.toLowerCase(): {
+        const pickemsResult = await getPickEms();
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            components: pickemsResult
+          }
+        });
+      }
+      default:
+        return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
+    }
   }
 
   console.error('Unknown Type');
