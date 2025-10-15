@@ -37,7 +37,6 @@ router.get('/', (request, env) => {
  * https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
  */
 router.post('/', async (request, env) => {
-  // console.log(request);  
   const { isValid, interaction } = await server.verifyDiscordRequest(
     request,
     env,
@@ -178,7 +177,7 @@ router.post('/', async (request, env) => {
         const awayTeam = game_data.awayTeam.commonName.default;
         const homeTeam = game_data.homeTeam.commonName.default;
         const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
-        // await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
+        await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
         let textContent = `# Current champ is <@${results[0].user_id}>\n`
         if(winnerIsHome) {
           const away = await server.getUser(game_data.awayTeam.abbrev, env);
@@ -207,12 +206,19 @@ router.post('/', async (request, env) => {
         });
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
-        const pickemsResult = await getPickEms();
+        // const pickemsResult = await getPickEms();
+        var currentdate = new Date(); 
+        var datetime = "Last Sync: " + currentdate.getDate() + "/"
+                        + (currentdate.getMonth()+1)  + "/" 
+                        + currentdate.getFullYear() + " @ "  
+                        + currentdate.getHours() + ":"  
+                        + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: pickemsResult
+            content: datetime
           }
         });
       }
