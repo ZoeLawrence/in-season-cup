@@ -82,7 +82,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `command name: ${interaction.data.name.toLowerCase()}`,
+            content: `command name: ${interaction.data.name.toLowerCase()} ${interaction.data.options[0].name.toLowerCase()}`,
           },
         });
     // switch (interaction.data.name.toLowerCase()) {
