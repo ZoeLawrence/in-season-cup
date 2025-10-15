@@ -190,7 +190,7 @@ router.post('/', async (request, env) => {
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            flags: 32768,
             components: [
               {
                 type: 17,  // ComponentType.CONTAINER
