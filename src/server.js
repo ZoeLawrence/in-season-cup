@@ -139,22 +139,38 @@ router.post('/', async (request, env) => {
         });
       }
       case REASSIGN_COMMAND.name.toLowerCase(): {
-        let test =  `command name: ${interaction.data.name.toLowerCase()} ${interaction.data.options[0].name.toLowerCase()}`;
-        const options = interaction.data.options[0].options;
-        const res = await server.addItem(
-          options[0].value,
-          options[1].value,
-          options[2].value,
-          request,
-          env,
-        );
-        return new JsonResponse({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `${JSON.stringify(res)} assign ${options[1].value} to ${options[0].value} and champion as ${options[2].value}`,
-          },
-        });
+        switch (interaction.data.options[0].name.toLowerCase()) {
+          case 'swap': {
+            // let test =  `command name: ${interaction.data.name.toLowerCase()} ${interaction.data.options[0].name.toLowerCase()}`;
+            const options = interaction.data.options[0].options;
+            // const res = await server.addItem(
+            //   options[0].value,
+            //   options[1].value,
+            //   options[2].value,
+            //   request,
+            //   env,
+            // );
+            return new JsonResponse({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+                content: `swap ${options[1].value} and ${options[0].value}`,
+              },
+            });
+          }
+          case 'replace': {
+            const options = interaction.data.options[0].options;
+            return new JsonResponse({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+                content: `assign ${options[1].value} to ${options[0].value}`,
+              },
+            });
+          }
+          default: 
+            return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
+        }
       }
       case START_COMMAND.name.toLowerCase(): {
         const currentMatchup = await getCurrentMatchup();
