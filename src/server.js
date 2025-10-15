@@ -123,8 +123,9 @@ router.post('/', async (request, env) => {
       }
       case ASSIGN_COMMAND.name.toLowerCase(): {
         //Pull all teams from DB, pull all users from DB
+        const champion = interaction.data.options[0].value;
         const results = await server.getUsers(request, env);
-        const assignments = await server.assignTeams(results, request, env);
+        const assignments = await server.assignTeams(results, champion, request, env);
         let toPrint = ``;
         for(let i = 0; i < assignments.length; i++) {
           toPrint += `${assignments[i].team} - <@${assignments[i].id}>\n`;
@@ -209,17 +210,147 @@ async function checkUser(username, request, env) {
   return results;
 }
 
-async function assignTeams(results, request, env) {
-  let teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
+async function assignTeams(results, champion, request, env) {
+  let teamList = [
+    {
+        name: 'Carolina Hurricanes',
+        value: 'CAR'
+    },
+    {
+        name: 'Columbus Blue Jackets',
+        value: 'CBJ'
+    },
+    {
+        name: 'New Jersey Devils',
+        value: 'NJD'
+    },
+    {
+        name: 'New York Islanders',
+        value: 'NYI'
+    },
+    {
+        name: 'New York Rangers',
+        value: 'NYR'
+    },
+    {
+        name: 'Philadelphia Flyers',
+        value: 'PHI'
+    },
+    {
+        name: 'Pittsburgh Penguins',
+        value: 'PIT'
+    },
+    {
+        name: 'Washington Capitals',
+        value: 'WSH'
+    },
+    {
+        name: 'Boston Bruins',
+        value: 'BOS'
+    },
+    {
+        name: 'Buffalo Sabres',
+        value: 'BUF'
+    },
+    {
+        name: 'Detroit Red Wings',
+        value: 'DET'
+    },
+    {
+        name: 'Florida Panthers',
+        value: 'FLA'
+    },
+    {
+        name: 'Montreal Canadiens',
+        value: 'MTL'
+    },
+    {
+        name: 'Ottawa Senators',
+        value: 'OTT'
+    },
+    {
+        name: 'Tampa Bay Lightning',
+        value: 'TBL'
+    },
+    {
+        name: 'Toronto Maple Leafs',
+        value: 'TOR'
+    },
+    {
+        name: 'Chicago Blackhawks',
+        value: 'CHI'
+    },
+    {
+        name: 'Colorado Avalanche',
+        value: 'COL'
+    },
+    {
+        name: 'Dallas Stars',
+        value: 'DAL'
+    },
+    {
+        name: 'Minnesota Wild',
+        value: 'MIN'
+    },
+    {
+        name: 'Nashville Predators',
+        value: 'NSH'
+    },
+    {
+        name: 'St. Louis Blues',
+        value: 'STL'
+    },
+    {
+        name: 'Utah Mammoth',
+        value: 'UTA'
+    },
+    {
+        name: 'Winnepeg Jets',
+        value: 'WPG'
+    },
+    {
+        name: 'Anaheim Ducks',
+        value: 'ANA'
+    },
+    {
+        name: 'Calgary Flames',
+        value: 'CGY'
+    },
+    {
+        name: 'Edmonton Oilers',
+        value: 'EDM'
+    },
+    {
+        name: 'Los Angeles Kings',
+        value: 'LAK'
+    },
+    {
+        name: 'San Jose Sharks',
+        value: 'SJS'
+    },
+    {
+        name: 'Seattle Kraken',
+        value: 'SEA'
+    },
+    {
+        name: 'Vancouver Canucks',
+        value: 'VAN'
+    },
+    {
+        name: 'Vegas Golden Knights',
+        value: 'VGK'
+    },
+  ];
   let statments = [];
   let assignments = [];
   let x = 0;
-  const stmt  = env.ASSIGN_DB.prepare("INSERT INTO players (team, user_id, isChamp) VALUES (?, ?, false);")
+  const stmt  = env.ASSIGN_DB.prepare("INSERT INTO players (team, user_id, isChamp) VALUES (?, ?, ?);")
   while(teamList.length) {
     const team = teamList.splice(teamList.length * Math.random() | 0, 1)[0];
     const userId = results[x].username;
-    statments[x] = stmt.bind(team, userId);
-    assignments[x] = { team: team, id: userId };
+    const isChamp = team.value == champion;
+    statments[x] = stmt.bind(team.value, userId, isChamp);
+    assignments[x] = { team: team.name, id: userId };
     x++;
   }
   const { res } = await env.ASSIGN_DB.batch(statments)
