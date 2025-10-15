@@ -1,7 +1,7 @@
-export async function getRandomTeam() {
-  const teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
-  return teamList[Math.floor(Math.random() * teamList.length)];
-}
+// export async function getRandomTeam() {
+//   const teamList = ['CAR', 'CBJ', 'NJD', 'NYI', 'NYR', 'PHI', 'PIT', 'WSH', 'BOS', 'BUF', 'DET', 'FLA', 'MTL', 'OTT', 'TBL', 'TOR', 'CHI', 'COL', 'DAL', 'MIN', 'NSH', 'STL', 'UTA', 'WPG', 'ANA', 'CGY', 'EDM', 'LAK', 'SJS', 'SEA', 'VAN', 'VGK'];
+//   return teamList[Math.floor(Math.random() * teamList.length)];
+// }
 
 export async function getCurrentMatchup(currentChamp) {
   const response = await fetch(`https://api-web.nhle.com/v1/club-schedule/${currentChamp}/week/now`);
@@ -15,7 +15,8 @@ export async function getCurrentMatchup(currentChamp) {
     } catch {
       // ignore
     }
-    throw new Error(errorText);
+    return errorText;
+    // throw new Error(errorText);
   }
   const data = await response.json();
   const game = data.games[0];
