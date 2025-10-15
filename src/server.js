@@ -213,7 +213,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            components: `${results[0]}`
+            content: `${results[0]}`
           }
         });
       }
@@ -434,7 +434,7 @@ async function updateCurrentMatch(game_id, game_time, env) {
   return results;
 }
 
-async function updateCurrentMatch2(game_id, game_time, env) {
+async function updateCurrentMatch2(env) {
   const { results } = await env.ASSIGN_DB
         .prepare("SELECT * FROM current;")
         .run();
