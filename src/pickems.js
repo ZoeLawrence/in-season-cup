@@ -6,69 +6,69 @@ export async function getPickEms() {
     let year = date.getFullYear();
     let currentDate = `https://api-web.nhle.com/v1/score/${year}-${month}-${day}`;
 	// let currentDate = `https://api-web.nhle.com/v1/score/2025-10-15`;
-	const response = await fetch(currentDate);
-  	if (!response.ok) {
-    	let errorText = `Error fetching ${response.url}: ${response.status} ${response.statusText}`;
-    	try {
-			const error = await response.text();
-			if (error) {
-				errorText = `${errorText} \n\n ${error}`;
-			}
-    	} catch {
-      	// ignore
-    	}
-   		throw new Error(errorText);
-  	}
-	const data = await response.json();
+	// const response = await fetch(currentDate);
+  	// if (!response.ok) {
+    // 	let errorText = `Error fetching ${response.url}: ${response.status} ${response.statusText}`;
+    // 	try {
+	// 		const error = await response.text();
+	// 		if (error) {
+	// 			errorText = `${errorText} \n\n ${error}`;
+	// 		}
+    // 	} catch {
+    //   	// ignore
+    // 	}
+   	// 	throw new Error(errorText);
+  	// }
+	// const data = await response.json();
 	// let text = `# Games Today\n`;
 	let games = [];
 	games[0] = {
 		type: 10,  // ComponentType.TEXT_DISPLAY
-		content: `# Games Today\n`
+		content: `# Games Today\n ${year}-${month}-${day}`
 	}	
-	for (let i = 0; i < data.games.length; i++) {
-		const game = data.games[i];
-		const awayTeam = game.awayTeam.name.default;
-		const homeTeam = game.homeTeam.name.default;
-		games[i + 1] = {
-			type: 17,  // ComponentType.CONTAINER
-			accent_color: 703487,
-			components: [
-				{
-					type: 9,
-					components: [
-						{
-							type: 10,  // ComponentType.TEXT_DISPLAY
-							content: `${homeTeam} vs ${awayTeam}`
-						},
-					],
-					accessory: {
-						type: 11,  // ComponentType.THUMBNAIL
-						media: {
-							url: game.homeTeam.logo
-						}
-					}
-				},
-				{
-					type: 1,  // ComponentType.ACTION_ROW
-					components: [
-						{
-							type: 2,  // ComponentType.BUTTON
-							custom_id: `select-${homeTeam}`,
-							label: `${homeTeam}`,
-							style: 1
-						},
-						{
-							type: 2,  // ComponentType.BUTTON
-							custom_id: `select-${awayTeam}`,
-							label: `${awayTeam}`,
-							style: 1
-						},
-					],
-				}
-			]
-		}
-	}		
+	// for (let i = 0; i < data.games.length; i++) {
+	// 	const game = data.games[i];
+	// 	const awayTeam = game.awayTeam.name.default;
+	// 	const homeTeam = game.homeTeam.name.default;
+	// 	games[i + 1] = {
+	// 		type: 17,  // ComponentType.CONTAINER
+	// 		accent_color: 703487,
+	// 		components: [
+	// 			{
+	// 				type: 9,
+	// 				components: [
+	// 					{
+	// 						type: 10,  // ComponentType.TEXT_DISPLAY
+	// 						content: `${homeTeam} vs ${awayTeam}`
+	// 					},
+	// 				],
+	// 				accessory: {
+	// 					type: 11,  // ComponentType.THUMBNAIL
+	// 					media: {
+	// 						url: game.homeTeam.logo
+	// 					}
+	// 				}
+	// 			},
+	// 			{
+	// 				type: 1,  // ComponentType.ACTION_ROW
+	// 				components: [
+	// 					{
+	// 						type: 2,  // ComponentType.BUTTON
+	// 						custom_id: `select-${homeTeam}`,
+	// 						label: `${homeTeam}`,
+	// 						style: 1
+	// 					},
+	// 					{
+	// 						type: 2,  // ComponentType.BUTTON
+	// 						custom_id: `select-${awayTeam}`,
+	// 						label: `${awayTeam}`,
+	// 						style: 1
+	// 					},
+	// 				],
+	// 			}
+	// 		]
+	// 	}
+	// }		
 //   const posts = data.games.children
 //     .map((post) => {
 //       if (post.is_gallery) {
