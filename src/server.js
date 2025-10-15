@@ -181,8 +181,8 @@ router.post('/', async (request, env) => {
         await server.updateCurrentMatch(game_data.game_id, game_data.game_time, env);
         let textContent = `# Current champ is <@${results[0].user_id}>\n`
         if(winnerIsHome) {
-          const away = await server.getUser(game_data.awayTeam.abbrev, env);
-          textContent +=  `${game_data.awayTeam.abbrev}` // `Next match up is <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}'s ${homeTeam}`;
+          // const away = await server.getUser(game_data.awayTeam.abbrev, env);
+          // textContent +=  `${game_data.awayTeam.abbrev}` // `Next match up is <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}'s ${homeTeam}`;
         } else {
           const home = await server.getUser(game_data.homeTeam.abbrev, env);
           textContent += `Next match up is <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
