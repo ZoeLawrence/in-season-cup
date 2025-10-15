@@ -174,7 +174,7 @@ router.post('/', async (request, env) => {
       }
       case START_COMMAND.name.toLowerCase(): {
         const results = await server.getChamp(env);
-        const currentMatchup = await getCurrentMatchup(results[0].team);
+        const currentMatchup = await getCurrentMatchup(results[0].team, env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
