@@ -177,6 +177,7 @@ router.post('/', async (request, env) => {
         const game_data = await getCurrentMatchup(results[0].team, env);
         const awayTeam = game_data.awayTeam.commonName.default;
         const homeTeam = game_data.homeTeam.commonName.default;
+        await server.updateCurrentMatch(game_data.game_id, game_data.game_time, env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
