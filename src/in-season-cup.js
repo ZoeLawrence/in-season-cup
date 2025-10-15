@@ -35,5 +35,5 @@ export async function getCurrentMatchup(currentChamp) {
 //     .filter((post) => !!post);
 //   const randomIndex = Math.floor(Math.random() * posts.length);
 //   const randomPost = posts[randomIndex];
-  return `Current champs ${currentChamp} vs ${awayTeam}`;
+  return `Current champ is ${currentChamp}, match up is ${awayTeam} @ ${homeTeam}`;
 }
