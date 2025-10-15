@@ -1,4 +1,7 @@
 export async function testAssignments(env) {
+    const { results } = await env.ASSIGN_DB
+        .prepare("SELECT * FROM players WHERE isChamp = 1;")
+        .run();
     const token = env.DISCORD_TOKEN;
     const channelId = '1425222879703990332';
     const MESSAGE = {
@@ -6,7 +9,7 @@ export async function testAssignments(env) {
         tts: false,
         embeds: [{
             title: "Hello, Embed!",
-            description: "This is an embedded message."
+            description: `${results[0].team}`
         }]
     }
 
