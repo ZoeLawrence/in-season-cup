@@ -3,8 +3,8 @@ export async function getRandomTeam() {
   return teamList[Math.floor(Math.random() * teamList.length)];
 }
 
-export async function getCurrentMatchup() {
-  const response = await fetch(nextGame);
+export async function getCurrentMatchup(currentChamp) {
+  const response = await fetch(`https://api-web.nhle.com/v1/club-schedule/${currentChamp}/week/now`);
   if (!response.ok) {
     let errorText = `Error fetching ${response.url}: ${response.status} ${response.statusText}`;
     try {
@@ -37,7 +37,3 @@ export async function getCurrentMatchup() {
 //   const randomPost = posts[randomIndex];
   return `Current champs ${currentChamp} vs ${awayTeam}`;
 }
-
-//Things needed to determine the current match-up
-export const currentChamp = `FLA`;
-export const nextGame = `https://api-web.nhle.com/v1/club-schedule/${currentChamp}/week/now`;

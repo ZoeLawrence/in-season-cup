@@ -10,7 +10,7 @@ import {
 } from 'discord-interactions';
 import { INVITE_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, PICKEMS_COMMAND, REASSIGN_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './in-season-cup.js';
-import { testAssignments } from './assign.js';
+import { testAssignments } from './next-game.js';
 import { getPickEms } from './pickems.js';
 
 class JsonResponse extends Response {
@@ -173,12 +173,13 @@ router.post('/', async (request, env) => {
         }
       }
       case START_COMMAND.name.toLowerCase(): {
-        const currentMatchup = await getCurrentMatchup();
+        const results = await server.getChamp(env);
+        const currentMatchup = await getCurrentMatchup(results.team);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `hello world ${currentMatchup}`,
+            content: currentMatchup,
           },
         });
       }
@@ -222,6 +223,13 @@ async function checkUser(username, request, env) {
   const { results } = await env.ASSIGN_DB
         .prepare("SELECT * FROM Persons WHERE username = ?;")
         .bind(username)
+        .run();
+  return results;
+}
+
+async function getChamp(env) {
+  const { results } = await env.ASSIGN_DB
+        .prepare("SELECT * FROM players WHERE isChamp = 1;")
         .run();
   return results;
 }
@@ -373,7 +381,7 @@ async function assignTeams(results, champion, request, env) {
   return assignments;
 }
 
-async function getUsers(request, env) {
+async function getAllUsers(request, env) {
   const { results } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
   return results;
 }
@@ -392,7 +400,8 @@ async function scheduled(controller, env, ctx) {
 
 const server = {
   verifyDiscordRequest,
-  getUsers,
+  getUsers: getAllUsers,
+  getChamp,
   assignTeams,
   addItem,
   checkUser,
