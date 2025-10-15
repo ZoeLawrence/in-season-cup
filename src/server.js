@@ -174,12 +174,14 @@ router.post('/', async (request, env) => {
       }
       case START_COMMAND.name.toLowerCase(): {
         const results = await server.getChamp(env);
-        const currentMatchup = await getCurrentMatchup(results[0].team, env);
+        const game_data = await getCurrentMatchup(results[0].team, env);
+        const awayTeam = game_data.awayTeam.commonName.default;
+        const homeTeam = game_data.homeTeam.commonName.default;
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: currentMatchup,
+            content: `Current champ is ${results[0].team}, match up is ${awayTeam} @ ${homeTeam}`,
           },
         });
       }
@@ -394,6 +396,14 @@ async function addItem(username, team, isChamp, request, env) {
   return results;
 }
 
+async function updateCurrentMatch(game_id, game_time, env) {
+  const { results } = await env.ASSIGN_DB
+        .prepare("INSERT INTO current (game_id, time) VALUES (?, ?);")
+        .bind(game_id, game_time)
+        .run();
+  return results;
+}
+
 async function scheduled(controller, env, ctx) {
   ctx.waitUntil(testAssignments(env));
 }
@@ -406,6 +416,7 @@ const server = {
   addItem,
   checkUser,
   scheduled,
+  updateCurrentMatch,
   fetch: router.fetch,
 };
 

@@ -20,12 +20,9 @@ export async function getCurrentMatchup(currentChamp) {
   }
   const data = await response.json();
   const game = data.games[0];
-  const awayTeam = game.awayTeam.commonName.default;
-  const homeTeam = game.homeTeam.commonName.default;
-  const { results } = await env.ASSIGN_DB
-        .prepare("INSERT INTO current (game_id, time) VALUES (?, ?);")
-        .bind(game.id, game.startTimeUTC)
-        .run();
+  // const awayTeam = game.awayTeam.commonName.default;
+  // const homeTeam = game.homeTeam.commonName.default;
+  
 //   const posts = data.games.children
 //     .map((post) => {
 //       if (post.is_gallery) {
@@ -40,5 +37,11 @@ export async function getCurrentMatchup(currentChamp) {
 //     .filter((post) => !!post);
 //   const randomIndex = Math.floor(Math.random() * posts.length);
 //   const randomPost = posts[randomIndex];
-  return `${JSON.stringify(results)} Current champ is ${currentChamp}, match up is ${awayTeam} @ ${homeTeam}`;
+  return {
+    game_id: game.id,
+    game_time: game.startTimeUTC,
+    homeTeam: game.homeTeam,
+    awayTeam: game.awayTeam,
+  };
+  //`${JSON.stringify(results)} Current champ is ${currentChamp}, match up is ${awayTeam} @ ${homeTeam}`
 }
