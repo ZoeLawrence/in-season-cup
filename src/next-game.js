@@ -1,17 +1,24 @@
+import { getCurrentMatchup } from './in-season-cup.js';
+
 export async function testAssignments(env) {
     const { results } = await env.ASSIGN_DB
         .prepare("SELECT * FROM players WHERE isChamp = 1;")
         .run();
+    const game_data = await getCurrentMatchup(results[0].team, env);
+    const awayTeam = game_data.awayTeam.commonName.default;
+    const homeTeam = game_data.homeTeam.commonName.default;
     const token = env.DISCORD_TOKEN;
     const channelId = '1425222879703990332';
     const MESSAGE = {
-        content: "Hello, World!",
         tts: false,
         embeds: [{
             title: "Hello, Embed!",
-            description: `${results[0].team}`
+            description: `Current champ is ${results[0].team}, next match up is ${awayTeam} @ ${homeTeam}`
         }]
     }
+    
+//     @Fenrir retains the cup!
+// @Fenrir and the Florida Panthers will move on to face @chrrisyg and the Philadelphia Flyers on Thursday!
 
     if (!token) {
         throw new Error('The DISCORD_TOKEN environment variable is required.');

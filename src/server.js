@@ -187,12 +187,13 @@ router.post('/', async (request, env) => {
         });
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
-        const pickemsResult = await getPickEms();
+        // const pickemsResult = await getPickEms();
+        const results = await server.updateCurrentMatch2(env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            components: pickemsResult
+            components: `${results}`
           }
         });
       }
@@ -405,6 +406,13 @@ async function updateCurrentMatch(game_id, game_time, env) {
   return results;
 }
 
+async function updateCurrentMatch2(game_id, game_time, env) {
+  const { results } = await env.ASSIGN_DB
+        .prepare("SELECT * FROM current;")
+        .run();
+  return results;
+}
+
 async function scheduled(controller, env, ctx) {
   ctx.waitUntil(testAssignments(env));
 }
@@ -418,6 +426,7 @@ const server = {
   checkUser,
   scheduled,
   updateCurrentMatch,
+  updateCurrentMatch2,
   fetch: router.fetch,
 };
 
