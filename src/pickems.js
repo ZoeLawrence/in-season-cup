@@ -83,5 +83,5 @@ export async function getPickEms() {
 //     .filter((post) => !!post);
 //   const randomIndex = Math.floor(Math.random() * posts.length);
 //   const randomPost = posts[randomIndex];
-	return games;
+	return currentDate;
 }

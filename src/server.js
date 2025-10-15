@@ -165,12 +165,13 @@ router.post('/', async (request, env) => {
         });
       }
       case START_COMMAND.name.toLowerCase(): {
-        const currentMatchup = await getCurrentMatchup();
+        // const currentMatchup = await getCurrentMatchup();
+        const pickemsResult = await getPickEms();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `hello world ${currentMatchup}`,
+            content: `hello world ${pickemsResult}`,
           },
         });
       }
