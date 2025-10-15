@@ -177,7 +177,34 @@ router.post('/', async (request, env) => {
         const game_data = await getCurrentMatchup(results[0].team, env);
         const awayTeam = game_data.awayTeam.commonName.default;
         const homeTeam = game_data.homeTeam.commonName.default;
+        const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
         await server.updateCurrentMatch(game_data.game_id, game_data.game_time, env);
+        let textContent = `# Welcome to the In Season Cup\n Current champ is <@${results[0].user_id}\n`
+        if(winnerIsHome) {
+          const away = await server.getUser(game_data.awayTeam.abbrev, env);
+          textContent += `Next match up is <@${away.user_id}>'s ${awayTeam} faces <@${results[0].user_id}'s ${homeTeam}`;
+        } else {
+          const home = await server.getUser(game_data.homeTeam.abbrev, env);
+          textContent += `Next match up is <@${home.user_id}>'s ${homeTeam} faces <@${results[0].user_id}'s ${awayTeam}`;
+        }
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: 32768,
+            components: [
+              {
+                type: 17,  // ComponentType.CONTAINER
+                accent_color: 703487,
+                components: [
+                  {
+                    type: 10,  // ComponentType.TEXT_DISPLAY
+                    content: textContent
+                  },
+                ]
+              }
+            ]
+          }
+        });
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
@@ -227,6 +254,14 @@ async function checkUser(username, request, env) {
   const { results } = await env.ASSIGN_DB
         .prepare("SELECT * FROM Persons WHERE username = ?;")
         .bind(username)
+        .run();
+  return results;
+}
+
+async function getUser(team, env) {
+  const { results } = await env.ASSIGN_DB
+        .prepare("SELECT * FROM players WHERE team = ?;")
+        .bind(team)
         .run();
   return results;
 }
@@ -427,6 +462,7 @@ const server = {
   scheduled,
   updateCurrentMatch,
   updateCurrentMatch2,
+  getUser,
   fetch: router.fetch,
 };
 
