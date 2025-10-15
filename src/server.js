@@ -209,11 +209,17 @@ router.post('/', async (request, env) => {
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
         const results = await server.updateCurrentMatch2(env);
+        let text = `it is: `
+        if(results[0] == undefined) {
+          text += `undefined`
+        } else {
+          text += `exists~!`
+        }
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `${results[0]}`
+            content: text
           }
         });
       }
