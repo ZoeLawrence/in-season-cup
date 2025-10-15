@@ -8,7 +8,7 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import { INVITE_COMMAND, MATCH_UP_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, PICKEMS_COMMAND, SETUP_COMMAND } from './commands.js';
+import { INVITE_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, PICKEMS_COMMAND, REASSIGN_COMMAND } from './commands.js';
 import { getCurrentMatchup } from './in-season-cup.js';
 import { testAssignments } from './assign.js';
 import { getPickEms } from './pickems.js';
