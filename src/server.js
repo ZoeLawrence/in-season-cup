@@ -182,15 +182,15 @@ router.post('/', async (request, env) => {
         let textContent = `# Current champ is <@${results[0].user_id}>\n`
         if(winnerIsHome) {
           const away = await server.getUser(game_data.awayTeam.abbrev, env);
-          textContent +=  `Next match up is <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}'s ${homeTeam}`;
+          textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
         } else {
           const home = await server.getUser(game_data.homeTeam.abbrev, env);
-          textContent += `Next match up is <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
+          textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
         }
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            flags: 32768,
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
             components: [
               {
                 type: 17,  // ComponentType.CONTAINER
@@ -205,13 +205,6 @@ router.post('/', async (request, env) => {
             ]
           }
         });
-        return new JsonResponse({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `Current champ is ${results[0].team}, next match up is ${awayTeam} @ ${homeTeam}`,
-          },
-        });
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
@@ -220,7 +213,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            components: `${results}`
+            components: `${results[0]}`
           }
         });
       }
