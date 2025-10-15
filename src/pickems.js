@@ -1,11 +1,11 @@
 export async function getPickEms() {
-    // var date = new Date();
-	// date.setDate(date.getDate() + 1);
-    // let day = date.getDate();
-    // let month = date.getMonth() + 1;
-    // let year = date.getFullYear();
-    // let currentDate = `https://api-web.nhle.com/v1/score/${year}-${month}-${day}`;
-	let currentDate = `https://api-web.nhle.com/v1/score/2025-10-15`;
+    var date = new Date();
+	date.setDate(date.getDate() + 1);
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let currentDate = `https://api-web.nhle.com/v1/score/${year}-${month}-${day}`;
+	// let currentDate = `https://api-web.nhle.com/v1/score/2025-10-15`;
 	const response = await fetch(currentDate);
   	if (!response.ok) {
     	let errorText = `Error fetching ${response.url}: ${response.status} ${response.statusText}`;
