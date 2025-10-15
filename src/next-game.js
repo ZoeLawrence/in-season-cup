@@ -1,13 +1,17 @@
+import {
+  InteractionResponseFlags,
+  InteractionResponseType,
+} from 'discord-interactions';
+
 export async function testAssignments(env) {
     const token = env.DISCORD_TOKEN;
     const channelId = '1425222879703990332';
     const MESSAGE = {
-        content: "Hello, World!",
-        tts: false,
-        embeds: [{
-            title: "Hello, Embed!",
-            description: "This is an embedded message."
-        }]
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `Testing this style of message`,
+        },
     }
 
     if (!token) {

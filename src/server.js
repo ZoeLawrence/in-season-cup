@@ -182,7 +182,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `Current champ is ${results[0].team}, match up is ${awayTeam} @ ${homeTeam}`,
+            content: `Current champ is ${results[0].team}, next match up is ${awayTeam} @ ${homeTeam}`,
           },
         });
       }

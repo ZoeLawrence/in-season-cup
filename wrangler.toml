@@ -18,4 +18,4 @@ database_name = "assignments"
 database_id = "390ae039-dc5f-43c3-ae66-0dbb479caf9f"
 
 [triggers]
-crons = ["0 */23 * * *"]
+crons = ["*/10 * * * *"]
