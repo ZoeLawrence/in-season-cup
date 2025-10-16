@@ -3,11 +3,11 @@ import { getNHLData, getCurrentMatchup } from './in-season-cup.js';
 export async function testAssignments(env) {
     let title = ``;
     let description = ``;
-    const current = await env.ASSIGN_DB
+    const { results } = await env.ASSIGN_DB
         .prepare("SELECT * FROM match;")
         .run();
-    if(current[0] != undefined) {
-        const game_time = new Date(current[0].datetime);
+    if(results[0] != undefined) {
+        const game_time = new Date(results[0].datetime);
         const current_time = new Date();
         if(current_time.getTime() > game_time.getTime()) {
             title = `current time`

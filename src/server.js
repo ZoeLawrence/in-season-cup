@@ -480,7 +480,7 @@ async function createFirstMatch(game_id, game_time, env) {
 }
 
 async function testNextGame(env) {
-  const results = await env.ASSIGN_DB
+  const { results } = await env.ASSIGN_DB
         .prepare("SELECT * FROM match;")
         .run();
   return results;
