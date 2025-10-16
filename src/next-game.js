@@ -6,11 +6,12 @@ export async function testAssignments(env) {
     const current = await env.ASSIGN_DB
         .prepare("SELECT * FROM match;")
         .run();
-    return current;
-    // if(current[0] != undefined) {
-    //     const game_time = new Date(current[0].datetime);
-    //     const current_time = new Date();
-    //     if(current_time.getTime() > game_time.getTime()) {
+    if(current[0] != undefined) {
+        const game_time = new Date(current[0].datetime);
+        const current_time = new Date();
+        if(current_time.getTime() > game_time.getTime()) {
+            title = `current time`
+            description = current_time.toLocaleDateString()
     //         const game_data = await getNHLData(`gamecenter/${current[0].game_id}/landing`);
     //         const away_abbr = game_data.awayTeam.abbrev;
     //         const home_abbr = game_data.homeTeam.abbrev;
@@ -68,47 +69,57 @@ export async function testAssignments(env) {
     //                 description: description
     //             }]
     //         }
+        } else {
+            title = `game time`
+            description = game_time.toLocaleDateString()
+        }
 
-    //         const token = env.DISCORD_TOKEN;
-    //         const channelId = '1425222879703990332';
+        const MESSAGE = {
+            tts: false,
+            embeds: [{
+                title: title,
+                description: description
+            }]
+        }
+        const token = env.DISCORD_TOKEN;
+        const channelId = '1425222879703990332';
 
-    //         if (!token) {
-    //             throw new Error('The DISCORD_TOKEN environment variable is required.');
-    //         }
-    //         if (!channelId) {
-    //             throw new Error(
-    //                 'The DISCORD_APPLICATION_ID environment variable is required.',
-    //             );
-    //         }
+        if (!token) {
+            throw new Error('The DISCORD_TOKEN environment variable is required.');
+        }
+        if (!channelId) {
+            throw new Error(
+                'The DISCORD_APPLICATION_ID environment variable is required.',
+            );
+        }
 
-    //         const url = `https://discord.com/api/v10/channels/${channelId}/messages`;
+        const url = `https://discord.com/api/v10/channels/${channelId}/messages`;
 
-    //         const response = await fetch(url, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bot ${token}`,
-    //             },
-    //             method: 'POST',
-    //             body: JSON.stringify(MESSAGE),
-    //         });
+        const response = await fetch(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bot ${token}`,
+            },
+            method: 'POST',
+            body: JSON.stringify(MESSAGE),
+        });
 
-    //         if (response.ok) {
-    //             console.log('Registered all commands');
-    //             const data = await response.json();
-    //             console.log(JSON.stringify(data, null, 2));
-    //         } else {
-    //             console.error('Error registering commands');
-    //             let errorText = `Error registering commands \n ${response.url}: ${response.status} ${response.statusText}`;
-    //             try {
-    //                 const error = await response.text();
-    //                 if (error) {
-    //                 errorText = `${errorText} \n\n ${error}`;
-    //                 }
-    //             } catch (err) {
-    //                 console.error('Error reading body from request:', err);
-    //             }
-    //             console.error(errorText);
-    //         }
-    //     }
-    // }
+        if (response.ok) {
+            console.log('Registered all commands');
+            const data = await response.json();
+            console.log(JSON.stringify(data, null, 2));
+        } else {
+            console.error('Error registering commands');
+            let errorText = `Error registering commands \n ${response.url}: ${response.status} ${response.statusText}`;
+            try {
+                const error = await response.text();
+                if (error) {
+                errorText = `${errorText} \n\n ${error}`;
+                }
+            } catch (err) {
+                console.error('Error reading body from request:', err);
+            }
+            console.error(errorText);
+        }
+    }
 }
