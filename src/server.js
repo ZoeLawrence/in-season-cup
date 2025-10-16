@@ -231,14 +231,14 @@ router.post('/', async (request, env) => {
 
             await testUpdateMatch(match_data.game_id, match_data.game_time);
 
-            let textContent = ``
-            if(newChampIsHome) {
-                const away = await server.getUser(match_data.awayTeam.abbrev, env);
-                textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
-            } else {
-                const home = await server.getUser(match_data.homeTeam.abbrev, env);
-                textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
-            }
+            let textContent = `test: `
+            // if(newChampIsHome) {
+            //     const away = await server.getUser(match_data.awayTeam.abbrev, env);
+            //     textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
+            // } else {
+            //     const home = await server.getUser(match_data.homeTeam.abbrev, env);
+            //     textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
+            // }
 
             return new JsonResponse({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -493,10 +493,11 @@ async function testUpdateChamp(currentChampIsHome, winnerIsHome, away_abbr, home
 }
 
 async function testUpdateMatch(game_id, game_time, env) {
-  await env.ASSIGN_DB
+   const { results } = await env.ASSIGN_DB
     .prepare("UPDATE match SET game_id = ?, datetime = ? WHERE rowid = 1;")
     .bind(game_id, game_time)
     .run();
+  return results;
 } 
 
 async function scheduled(controller, env, ctx) {
