@@ -447,7 +447,7 @@ async function addItem(username, team, isChamp, request, env) {
 
 async function createFirstMatch(game_id, game_time, env) {
   const { results } = await env.ASSIGN_DB
-        .prepare("INSERT INTO match (game_id, time) VALUES (?, ?);")
+        .prepare("INSERT INTO match (game_id, datetime) VALUES (?, ?);")
         .bind(game_id, game_time)
         .run();
   return results;
