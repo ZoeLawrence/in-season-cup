@@ -227,7 +227,7 @@ router.post('/', async (request, env) => {
             const awayTeam = game_data.awayTeam.commonName.default;
             const homeTeam = game_data.homeTeam.commonName.default;
 
-            const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
+            const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
 
             await testUpdateMatch(match_data.game_id, match_data.game_time);
 
