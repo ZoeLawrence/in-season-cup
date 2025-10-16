@@ -209,24 +209,30 @@ router.post('/', async (request, env) => {
         // const pickemsResult = await getPickEms();
         const result = await testNextGame(env);
         if(result[0] != undefined) {
-          const datetime = result[0].datetime;
-          return new JsonResponse({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-              content: `datetime ${datetime}`
-            }
-          });
-        } else {
-          const d = new Date(); 
-          return new JsonResponse({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-              content: `new date ${d.toISOString()}`
-            }
-          });
+          const game_time = new Date(current[0].datetime);
+          const current_time = new Date();
+          if(current_time.getTime() > game_time.getTime()) {
+            const game_data = await getNHLData(`gamecenter/${current[0].gamed_id}/landing`);
+            const away_abbr = game_data.awayTeam.abbrev;
+            const home_abbr = game_data.homeTeam.abbrev;
+            
+            return new JsonResponse({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+                content: `away_abbr ${away_abbr} @ home_abbr ${home_abbr}`
+              }
+            });
+          }
         }
+        const d = new Date(); 
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            content: `new date ${d.toISOString()}`
+          }
+        });
         // const date = `${d.toUTCStrin()}`
         // var datetime = "Last Sync: " + currentdate.getDate() + "/"
         //                 + (currentdate.getMonth()+1)  + "/" 
