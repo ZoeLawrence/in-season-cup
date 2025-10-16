@@ -234,12 +234,13 @@ router.post('/', async (request, env) => {
             const game_day = new Date(match_data.game_time);
 
             let textContent = ``
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             if(newChampIsHome) {
                 const away = await server.getUser(match_data.awayTeam.abbrev, env);
-                textContent +=  `<@${results[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${game_day.getDay()}!`;
+                textContent +=  `<@${results[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
             } else {
                 const home = await server.getUser(match_data.homeTeam.abbrev, env);
-                textContent += `<@${results[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${game_day.getDay()}!`;
+                textContent += `<@${results[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
             }
 
             return new JsonResponse({

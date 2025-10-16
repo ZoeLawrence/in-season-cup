@@ -50,12 +50,14 @@ export async function testAssignments(env) {
 
             const game_day = new Date(match_data.game_time);
 
+            const player = env.ASSIGN_DB.prepare("SELECT * FROM players WHERE team = ?;")
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             if(newChampIsHome) {
-                const away = await server.getUser(match_data.awayTeam.abbrev, env);
-                description +=  `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${game_day.getDay()}!`;
+                const { away } = await player.bind(match_data.awayTeam.abbrev).run();
+                description += `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
             } else {
-                const home = await server.getUser(match_data.homeTeam.abbrev, env);
-                description += `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${game_day.getDay()}!`;
+                const { home } = await player.bind(match_data.homeTeam.abbrev).run();
+                description += `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
             }
             
             const token = env.DISCORD_TOKEN;
@@ -67,9 +69,6 @@ export async function testAssignments(env) {
                     description: description
                 }]
             }
-            
-        //     @Fenrir retains the cup!
-        // @Fenrir and the Florida Panthers will move on to face @chrrisyg and the Philadelphia Flyers on Thursday!
 
             if (!token) {
                 throw new Error('The DISCORD_TOKEN environment variable is required.');
