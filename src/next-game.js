@@ -29,7 +29,7 @@ export async function testAssignments(env) {
 			}
 
 			// const results = await server.getChamp(env);
-			const newChamp = await getNewChamp()
+			const newChamp = await getNewChamp(env);
 
 			// // const game_data = await getCurrentMatchup(results[0].team, env);
 			// const match_data = await getCurrentMatchup(newChamp[0].team, env);
