@@ -44,14 +44,13 @@ export async function testAssignments(env) {
 			await getNextMatch(match_data.game_id, match_data.game_time, env);
 
 			const game_day = new Date(match_data.game_time);
-
-			const player = env.ASSIGN_DB.prepare("SELECT * FROM players WHERE team = ?;")
 			const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+			
 			if (newChampIsHome) {
-				const { away } = await player.bind(match_data.awayTeam.abbrev).run();
+				const away = await getPlayer(match_data.awayTeam.abbrev)
 				description = `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
 			} else {
-				const { home } = await player.bind(match_data.homeTeam.abbrev).run();
+				const home = await getPlayer(match_data.homeTeam.abbrev)
 				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
 			}
 			title = `# <@${newChamp[0].user_id}> ${title}`;
@@ -131,6 +130,14 @@ async function getNextMatch(game_id, game_time, env) {
 	const { results } = await env.ASSIGN_DB
 		.prepare("UPDATE match SET game_id = ?, datetime = ? WHERE rowid = 1;")
 		.bind(game_id, game_time)
+		.run();
+	return results;
+}
+
+async function getPlayer(abbrev, env) {
+	const { results } = await env.ASSIGN_DB
+		.prepare("SELECT * FROM players WHERE team = ?;")
+		.bind(abbrev)
 		.run();
 	return results;
 }
