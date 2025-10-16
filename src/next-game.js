@@ -45,12 +45,12 @@ export async function testAssignments(env) {
 
 			const game_day = new Date(match_data.game_time);
 			const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-			
+
 			if (newChampIsHome) {
-				const away = await getPlayer(match_data.awayTeam.abbrev)
+				const away = await getPlayer(match_data.awayTeam.abbrev, env)
 				description = `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
 			} else {
-				const home = await getPlayer(match_data.homeTeam.abbrev)
+				const home = await getPlayer(match_data.homeTeam.abbrev, env)
 				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
 			}
 			title = `# <@${newChamp[0].user_id}> ${title}`;
