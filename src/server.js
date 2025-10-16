@@ -208,7 +208,7 @@ router.post('/', async (request, env) => {
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
         const result = await testNextGame(env);
-        if(result != undefined) {
+        if(result[0] != undefined) {
           const datetime = result[0].time;
           return new JsonResponse({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
