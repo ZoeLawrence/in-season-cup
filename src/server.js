@@ -209,7 +209,7 @@ router.post('/', async (request, env) => {
         // const pickemsResult = await getPickEms();
         const result = await testNextGame(env);
         if(result[0] != undefined) {
-          const datetime = result[0].time;
+          const datetime = result[0].datetime;
           return new JsonResponse({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {

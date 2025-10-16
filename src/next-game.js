@@ -5,7 +5,7 @@ export async function testAssignments(env) {
         .prepare("SELECT * FROM match;")
         .run();
     if(current[0] != undefined) {
-        const game_time = new Date(current[0].time);
+        const game_time = new Date(current[0].datetime);
         const current_time = new Date();
         if(current_time.getTime() > game_time.getTime()) {
             const game_data = await getNHLData(`gamecenter/${current[0].gamed_id}/landing`);
