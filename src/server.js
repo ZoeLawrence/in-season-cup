@@ -209,10 +209,10 @@ router.post('/', async (request, env) => {
         // const pickemsResult = await getPickEms();
         const result = await testNextGame(env);
         if(result[0] != undefined) {
-          const game_time = new Date(current[0].datetime);
+          const game_time = new Date(result[0].datetime);
           const current_time = new Date();
           if(current_time.getTime() > game_time.getTime()) {
-            const game_data = await getNHLData(`gamecenter/${current[0].gamed_id}/landing`);
+            const game_data = await getNHLData(`gamecenter/${result[0].gamed_id}/landing`);
             const away_abbr = game_data.awayTeam.abbrev;
             const home_abbr = game_data.homeTeam.abbrev;
 
