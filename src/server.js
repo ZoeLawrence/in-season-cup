@@ -208,25 +208,32 @@ router.post('/', async (request, env) => {
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
         const result = await testNextGame(env);
-        if(result[0] != undefined) {
-          const datetime = result[0].time;
-          return new JsonResponse({
+        return new JsonResponse({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
               flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-              content: `datetime ${datetime}`
+              content: `new date ${result}`
             }
           });
-        } else {
-          const d = new Date(); 
-          return new JsonResponse({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-              content: `new date ${d.toISOString()}`
-            }
-          });
-        }
+        // if(result[0] != undefined) {
+        //   const datetime = result[0].time;
+        //   return new JsonResponse({
+        //     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        //     data: {
+        //       flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+        //       content: `datetime ${datetime}`
+        //     }
+        //   });
+        // } else {
+        //   const d = new Date(); 
+        //   return new JsonResponse({
+        //     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        //     data: {
+        //       flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+        //       content: `new date ${d.toISOString()}`
+        //     }
+        //   });
+        // }
         // const date = `${d.toUTCStrin()}`
         // var datetime = "Last Sync: " + currentdate.getDate() + "/"
         //                 + (currentdate.getMonth()+1)  + "/" 
