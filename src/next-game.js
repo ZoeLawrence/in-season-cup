@@ -28,8 +28,8 @@ export async function testAssignments(env) {
 				title = `retains the cup!`
 			}
 
-			// // const results = await server.getChamp(env);
-			// const newChamp = await getNewChamp()
+			// const results = await server.getChamp(env);
+			const newChamp = await getNewChamp()
 
 			// // const game_data = await getCurrentMatchup(results[0].team, env);
 			// const match_data = await getCurrentMatchup(newChamp[0].team, env);
