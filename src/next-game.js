@@ -3,7 +3,7 @@ import { getNHLData, getCurrentMatchup } from './in-season-cup.js';
 export async function testAssignments(env) {
     let title = ``;
     let description = ``;
-    const { current } = await env.ASSIGN_DB
+    const current = await env.ASSIGN_DB
         .prepare("SELECT * FROM match;")
         .run();
     return current;
