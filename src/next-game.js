@@ -4,8 +4,8 @@ export async function testAssignments(env) {
     const { current } = await env.ASSIGN_DB
         .prepare("SELECT * FROM current;")
         .run();
-    if(current[0] != undefined) {
-        const datetime = current[0].time;
+    if(current != undefined) {
+        // const datetime = current[0].time;
         const { results } = await env.ASSIGN_DB
             .prepare("SELECT * FROM players WHERE isChamp = 1;")
             .run();
