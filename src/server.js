@@ -207,7 +207,7 @@ router.post('/', async (request, env) => {
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
-        const result = await testNextGame(env);
+        const result = await server.testNextGame(env);
         if(result[0] != undefined) {
           const game_time = new Date(result[0].datetime);
           const current_time = new Date();
@@ -231,7 +231,7 @@ router.post('/', async (request, env) => {
 
             // await testUpdateMatch(match_data.game_id, match_data.game_time);
 
-            let textContent = `test: `
+            let textContent = `test: ${results[0].team} ${match_data.game_id} ${match_data.game_time}`
             // if(newChampIsHome) {
             //     const away = await server.getUser(match_data.awayTeam.abbrev, env);
             //     textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
