@@ -229,22 +229,22 @@ router.post('/', async (request, env) => {
 
             const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
 
-            // await testUpdateMatch(match_data.game_id, match_data.game_time);
+            await testUpdateMatch(match_data.game_id, match_data.game_time);
 
-            // let textContent = ``
-            // if(newChampIsHome) {
-            //     const away = await server.getUser(match_data.awayTeam.abbrev, env);
-            //     textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
-            // } else {
-            //     const home = await server.getUser(match_data.homeTeam.abbrev, env);
-            //     textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
-            // }
+            let textContent = ``
+            if(newChampIsHome) {
+                const away = await server.getUser(match_data.awayTeam.abbrev, env);
+                textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
+            } else {
+                const home = await server.getUser(match_data.homeTeam.abbrev, env);
+                textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
+            }
 
             return new JsonResponse({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
                 flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-                content: `${match_data}`
+                content: textContent
               }
             });
           }
