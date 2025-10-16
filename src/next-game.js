@@ -35,7 +35,7 @@ export async function testAssignments(env) {
             const homeTeam = game_data.homeTeam.commonName.default;
 
             // const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
-            const newChampIsHome = newChamp[0].team == game_data.homeTeam.abbrev;
+            const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
 
             // await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
             const { current } = await env.ASSIGN_DB

@@ -221,11 +221,30 @@ router.post('/', async (request, env) => {
 
             await testUpdateChamp(currentChampIsHome, winnerIsHome, away_abbr, home_abbr, env)
 
+            const results = await server.getChamp(env);
+            const match_data = await getCurrentMatchup(results[0].team, env);
+
+            const awayTeam = game_data.awayTeam.commonName.default;
+            const homeTeam = game_data.homeTeam.commonName.default;
+
+            const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
+
+            await testUpdateMatch(match_data.game_id, match_data.game_time);
+
+            let textContent = ``
+            if(newChampIsHome) {
+                const away = await server.getUser(match_data.awayTeam.abbrev, env);
+                textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
+            } else {
+                const home = await server.getUser(match_data.homeTeam.abbrev, env);
+                textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
+            }
+
             return new JsonResponse({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
                 flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-                content: `away_abbr ${away_abbr} @ home_abbr ${home_abbr}`
+                content: textContent
               }
             });
           }
@@ -473,6 +492,13 @@ async function testUpdateChamp(currentChampIsHome, winnerIsHome, away_abbr, home
   }
 }
 
+async function testUpdateMatch(game_id, game_time, env) {
+  await env.ASSIGN_DB
+    .prepare("UPDATE match SET game_id = ?, datetime = ? WHERE rowid = 1;")
+    .bind(game_id, game_time)
+    .run();
+} 
+
 async function scheduled(controller, env, ctx) {
   ctx.waitUntil(testAssignments(env));
 }
@@ -489,6 +515,7 @@ const server = {
   getUser,
   testNextGame,
   testUpdateChamp,
+  testUpdateMatch,
   fetch: router.fetch,
 };
 
