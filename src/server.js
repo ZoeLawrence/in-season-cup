@@ -229,7 +229,7 @@ router.post('/', async (request, env) => {
 
             const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
 
-            await testUpdateMatch(match_data.game_id, match_data.game_time);
+            await server.testUpdateMatch(match_data.game_id, match_data.game_time);
 
             let textContent = `test: ${results[0].team} ${match_data.game_id} ${match_data.game_time}`
             // if(newChampIsHome) {
@@ -493,7 +493,7 @@ async function testUpdateChamp(currentChampIsHome, winnerIsHome, away_abbr, home
 }
 
 async function testUpdateMatch(game_id, game_time, env) {
-   const { results } = await env.ASSIGN_DB
+  const { results } = await env.ASSIGN_DB
     .prepare("UPDATE match SET game_id = ?, datetime = ? WHERE rowid = 1;")
     .bind(game_id, game_time)
     .run();
