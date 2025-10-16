@@ -10,23 +10,23 @@ export async function testAssignments(env) {
 		if (current_time.getTime() > game_time.getTime()) {
 			title = `current time`
 			description = current_time.toLocaleDateString()
-			// const game_data = await getNHLData(`gamecenter/${currentMatch[0].game_id}/landing`);
-			// const away_abbr = game_data.awayTeam.abbrev;
-			// const home_abbr = game_data.homeTeam.abbrev;
+			const game_data = await getNHLData(`gamecenter/${currentMatch[0].game_id}/landing`);
+			const away_abbr = game_data.awayTeam.abbrev;
+			const home_abbr = game_data.homeTeam.abbrev;
 
-			// const currentChampIsHome = currentMatch[0].team == home_abbr;
-			// const winnerIsHome = game_data.homeTeam.score > game_data.awayTeam.score;
+			const currentChampIsHome = currentMatch[0].team == home_abbr;
+			const winnerIsHome = game_data.homeTeam.score > game_data.awayTeam.score;
 
-			// const stmt = env.ASSIGN_DB.prepare("UPDATE players SET isChamp = ? WHERE team = ?;")
-			// if (currentChampIsHome != winnerIsHome) {
-			// 	await env.ASSIGN_DB.batch([
-			// 		stmt.bind(!winnerIsHome, away_abbr),
-			// 		stmt.bind(winnerIsHome, home_abbr)
-			// 	]);
-			// 	title = `wins the cup!`;
-			// } else {
-			// 	title = `retains the cup!`
-			// }
+			const stmt = env.ASSIGN_DB.prepare("UPDATE players SET isChamp = ? WHERE team = ?;")
+			if (currentChampIsHome != winnerIsHome) {
+				await env.ASSIGN_DB.batch([
+					stmt.bind(!winnerIsHome, away_abbr),
+					stmt.bind(winnerIsHome, home_abbr)
+				]);
+				title = `wins the cup!`;
+			} else {
+				title = `retains the cup!`
+			}
 
 			// // const results = await server.getChamp(env);
 			// const newChamp = await getNewChamp()
