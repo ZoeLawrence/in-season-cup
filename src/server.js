@@ -207,51 +207,52 @@ router.post('/', async (request, env) => {
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
-        const result = await server.testNextGame(env);
-        if(result[0] != undefined) {
-          const game_time = new Date(result[0].datetime);
-          const current_time = new Date();
-          if(current_time.getTime() > game_time.getTime()) {
-            const game_data = await getNHLData(`gamecenter/${result[0].game_id}/landing`);
-            const away_abbr = game_data.awayTeam.abbrev;
-            const home_abbr = game_data.homeTeam.abbrev;
+        // const result = await server.testNextGame(env);
+        // if(result[0] != undefined) {
+        //   const game_time = new Date(result[0].datetime);
+        //   const current_time = new Date();
+        //   if(current_time.getTime() > game_time.getTime()) {
+        //     const game_data = await getNHLData(`gamecenter/${result[0].game_id}/landing`);
+        //     const away_abbr = game_data.awayTeam.abbrev;
+        //     const home_abbr = game_data.homeTeam.abbrev;
 
-            const currentChampIsHome = result[0].team == home_abbr;
-            const winnerIsHome = game_data.homeTeam.score > game_data.awayTeam.score;
+        //     const currentChampIsHome = result[0].team == home_abbr;
+        //     const winnerIsHome = game_data.homeTeam.score > game_data.awayTeam.score;
 
-            await testUpdateChamp(currentChampIsHome, winnerIsHome, away_abbr, home_abbr, env)
+        //     await testUpdateChamp(currentChampIsHome, winnerIsHome, away_abbr, home_abbr, env)
 
-            const results = await server.getChamp(env);
-            const match_data = await getCurrentMatchup(results[0].team, env);
+        //     const results = await server.getChamp(env);
+        //     const match_data = await getCurrentMatchup(results[0].team, env);
 
-            const awayTeam = `${match_data.awayTeam.placeName.default} ${match_data.awayTeam.commonName.default}`;
-            const homeTeam = `${match_data.homeTeam.placeName.default} ${match_data.homeTeam.commonName.default}`;
+        //     const awayTeam = `${match_data.awayTeam.placeName.default} ${match_data.awayTeam.commonName.default}`;
+        //     const homeTeam = `${match_data.homeTeam.placeName.default} ${match_data.homeTeam.commonName.default}`;
 
-            const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
+        //     const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
 
-            await server.testUpdateMatch(match_data.game_id, match_data.game_time, env);
+        //     await server.testUpdateMatch(match_data.game_id, match_data.game_time, env);
 
-            const game_day = new Date(match_data.game_time);
+        //     const game_day = new Date(match_data.game_time);
 
-            let textContent = ``
-            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            if(newChampIsHome) {
-                const away = await server.getUser(match_data.awayTeam.abbrev, env);
-                textContent +=  `<@${results[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
-            } else {
-                const home = await server.getUser(match_data.homeTeam.abbrev, env);
-                textContent += `<@${results[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
-            }
+        //     let textContent = ``
+        //     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        //     if(newChampIsHome) {
+        //         const away = await server.getUser(match_data.awayTeam.abbrev, env);
+        //         textContent +=  `<@${results[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
+        //     } else {
+        //         const home = await server.getUser(match_data.homeTeam.abbrev, env);
+        //         textContent += `<@${results[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
+        //     }
 
-            return new JsonResponse({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-                content: textContent
-              }
-            });
-          }
-        }
+        //     return new JsonResponse({
+        //       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        //       data: {
+        //         flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+        //         content: textContent
+        //       }
+        //     });
+        //   }
+        // }
+        await testAssignments(env);
         const d = new Date(); 
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
