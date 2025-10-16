@@ -252,13 +252,13 @@ router.post('/', async (request, env) => {
         //     });
         //   }
         // }
-        await testAssignments(env);
+        const result = await testAssignments(env);
         const d = new Date(); 
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `new date ${d.toISOString()}`
+            content: `new date ${result} ${d.toISOString()}`
           }
         });
       }
