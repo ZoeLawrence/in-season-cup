@@ -224,21 +224,23 @@ router.post('/', async (request, env) => {
             const results = await server.getChamp(env);
             const match_data = await getCurrentMatchup(results[0].team, env);
 
-            const awayTeam = match_data.awayTeam.commonName.default;
-            const homeTeam = match_data.homeTeam.commonName.default;
+            const awayTeam = `${match_data.awayTeam.placeName.default} ${match_data.awayTeam.commonName.default}`;
+            const homeTeam = `${match_data.homeTeam.placeName.default} ${match_data.homeTeam.commonName.default}`;
 
             const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
 
             await server.testUpdateMatch(match_data.game_id, match_data.game_time, env);
 
-            let textContent = `test: ${results[0].team} ${match_data.game_id} ${match_data.game_time}`
-            // if(newChampIsHome) {
-            //     const away = await server.getUser(match_data.awayTeam.abbrev, env);
-            //     textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
-            // } else {
-            //     const home = await server.getUser(match_data.homeTeam.abbrev, env);
-            //     textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
-            // }
+            const game_day = new Date(match_data.game_time);
+
+            let textContent = ``
+            if(newChampIsHome) {
+                const away = await server.getUser(match_data.awayTeam.abbrev, env);
+                textContent +=  `<@${results[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${game_day.getDay()}!`;
+            } else {
+                const home = await server.getUser(match_data.homeTeam.abbrev, env);
+                textContent += `<@${results[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${game_day.getDay()}!`;
+            }
 
             return new JsonResponse({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

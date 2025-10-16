@@ -1,6 +1,8 @@
 import { getNHLData, getCurrentMatchup } from './in-season-cup.js';
 
 export async function testAssignments(env) {
+    let title = ``;
+    let description = ``;
     const { current } = await env.ASSIGN_DB
         .prepare("SELECT * FROM match;")
         .run();
@@ -20,8 +22,11 @@ export async function testAssignments(env) {
                 await env.ASSIGN_DB.batch([
                     stmt.bind(!winnerIsHome, away_abbr),
                     stmt.bind(winnerIsHome, home_abbr)
-                ]);   
-            }    
+                ]);  
+                title = `wins the cup!`;
+            } else {
+                title = `retains the cup!`
+            }   
 
             // const results = await server.getChamp(env);
             const { newChamp } = await env.ASSIGN_DB
@@ -31,8 +36,8 @@ export async function testAssignments(env) {
             // const game_data = await getCurrentMatchup(results[0].team, env);
             const match_data = await getCurrentMatchup(newChamp[0].team, env);
 
-            const awayTeam = match_data.awayTeam.commonName.default;
-            const homeTeam = match_data.homeTeam.commonName.default;
+            const awayTeam = `${match_data.awayTeam.placeName.default} ${match_data.awayTeam.commonName.default}`;
+            const homeTeam = `${match_data.homeTeam.placeName.default} ${match_data.homeTeam.commonName.default}`;
 
             // const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
             const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
@@ -43,13 +48,14 @@ export async function testAssignments(env) {
                     .bind(match_data.game_id, match_data.game_time)
                     .run();
 
-            let textContent = ``
+            const game_day = new Date(match_data.game_time);
+
             if(newChampIsHome) {
                 const away = await server.getUser(match_data.awayTeam.abbrev, env);
-                textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${newChamp[0].user_id}>'s ${homeTeam}`;
+                description +=  `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${game_day.getDay()}!`;
             } else {
                 const home = await server.getUser(match_data.homeTeam.abbrev, env);
-                textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${newChamp[0].user_id}>'s ${awayTeam}`;
+                description += `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${game_day.getDay()}!`;
             }
             
             const token = env.DISCORD_TOKEN;
@@ -57,8 +63,8 @@ export async function testAssignments(env) {
             const MESSAGE = {
                 tts: false,
                 embeds: [{
-                    title: `# Current champ is <@${newChamp[0].user_id}>`,
-                    description: textContent
+                    title: `# <@${newChamp[0].user_id}> ${title}`,
+                    description: description
                 }]
             }
             
