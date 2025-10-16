@@ -224,10 +224,10 @@ router.post('/', async (request, env) => {
             const results = await server.getChamp(env);
             const match_data = await getCurrentMatchup(results[0].team, env);
 
-            // const awayTeam = game_data.awayTeam.commonName.default;
-            // const homeTeam = game_data.homeTeam.commonName.default;
+            const awayTeam = match_data.awayTeam.commonName.default;
+            const homeTeam = match_data.homeTeam.commonName.default;
 
-            // const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
+            const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
 
             // await testUpdateMatch(match_data.game_id, match_data.game_time);
 

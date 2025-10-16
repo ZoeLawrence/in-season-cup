@@ -31,8 +31,8 @@ export async function testAssignments(env) {
             // const game_data = await getCurrentMatchup(results[0].team, env);
             const match_data = await getCurrentMatchup(newChamp[0].team, env);
 
-            const awayTeam = game_data.awayTeam.commonName.default;
-            const homeTeam = game_data.homeTeam.commonName.default;
+            const awayTeam = match_data.awayTeam.commonName.default;
+            const homeTeam = match_data.homeTeam.commonName.default;
 
             // const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
             const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
