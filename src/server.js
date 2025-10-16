@@ -211,19 +211,20 @@ router.post('/', async (request, env) => {
         if(result[0] != undefined) {
           const game_time = new Date(result[0].datetime);
           const current_time = new Date();
-          if(current_time.getTime() > game_time.getTime()) {
-            const game_data = await getNHLData(`gamecenter/${result[0].gamed_id}/landing`);
-            const away_abbr = game_data.awayTeam.abbrev;
-            const home_abbr = game_data.homeTeam.abbrev;
+          // if(current_time.getTime() > game_time.getTime()) {
+          //   const game_data = await getNHLData(`gamecenter/${result[0].gamed_id}/landing`);
+          //   const away_abbr = game_data.awayTeam.abbrev;
+          //   const home_abbr = game_data.homeTeam.abbrev;
 
-            return new JsonResponse({
+            
+          // }
+          return new JsonResponse({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
                 flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-                content: `away_abbr ${away_abbr} @ home_abbr ${home_abbr}`
+                content: `current_time.getTime() > game_time.getTime() = ${current_time.getTime() > game_time.getTime()}`
               }
             });
-          }
         }
         const d = new Date(); 
         return new JsonResponse({
