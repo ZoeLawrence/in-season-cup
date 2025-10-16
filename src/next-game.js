@@ -12,7 +12,7 @@ export async function testAssignments(env) {
             const away_abbr = game_data.awayTeam.abbrev;
             const home_abbr = game_data.homeTeam.abbrev;
 
-            const currentChampIsHome = results[0].team == home_abbr;
+            const currentChampIsHome = current[0].team == home_abbr;
             const winnerIsHome = game_data.homeTeam.score > game_data.awayTeam.score;
 
             const stmt = env.ASSIGN_DB.prepare("UPDATE players SET isChamp = ? WHERE team = ?;")

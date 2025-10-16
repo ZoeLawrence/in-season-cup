@@ -215,6 +215,12 @@ router.post('/', async (request, env) => {
             const game_data = await getNHLData(`gamecenter/${result[0].game_id}/landing`);
             const away_abbr = game_data.awayTeam.abbrev;
             const home_abbr = game_data.homeTeam.abbrev;
+
+            const currentChampIsHome = result[0].team == home_abbr;
+            const winnerIsHome = game_data.homeTeam.score > game_data.awayTeam.score;
+
+            await testUpdateChamp(currentChampIsHome, winnerIsHome, away_abbr, home_abbr, env)
+
             return new JsonResponse({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
@@ -232,14 +238,6 @@ router.post('/', async (request, env) => {
             content: `new date ${d.toISOString()}`
           }
         });
-        // const date = `${d.toUTCStrin()}`
-        // var datetime = "Last Sync: " + currentdate.getDate() + "/"
-        //                 + (currentdate.getMonth()+1)  + "/" 
-        //                 + currentdate.getFullYear() + " @ "  
-        //                 + currentdate.getHours() + ":"  
-        //                 + currentdate.getMinutes() + ":" 
-        //         + currentdate.getSeconds();
-        
       }
       default:
         return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
@@ -465,6 +463,16 @@ async function testNextGame(env) {
   return results;
 }
 
+async function testUpdateChamp(currentChampIsHome, winnerIsHome, away_abbr, home_abbr, env) {
+  const stmt = env.ASSIGN_DB.prepare("UPDATE players SET isChamp = ? WHERE team = ?;")
+  if(currentChampIsHome != winnerIsHome) {
+      await env.ASSIGN_DB.batch([
+          stmt.bind(!winnerIsHome, away_abbr),
+          stmt.bind(winnerIsHome, home_abbr)
+      ]);   
+  }
+}
+
 async function scheduled(controller, env, ctx) {
   ctx.waitUntil(testAssignments(env));
 }
@@ -480,6 +488,7 @@ const server = {
   createFirstMatch,
   getUser,
   testNextGame,
+  testUpdateChamp,
   fetch: router.fetch,
 };
 
