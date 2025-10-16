@@ -55,7 +55,7 @@ router.post('/', async (request, env) => {
 
 	if (interaction.type == InteractionType.MESSAGE_COMPONENT) {
 		const userId = interaction.member.user.id
-		const results = await server.checkUser(userId, request, env);
+		const results = await server.doesUserExist(userId, env);
 		if (results != null && results.length > 0) {
 			return new JsonResponse({
 				type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -65,7 +65,7 @@ router.post('/', async (request, env) => {
 				},
 			});
 		}
-		await server.addItem(userId, '', false, request, env);
+		await server.addDiscordUser(userId, env);
 		return new JsonResponse({
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {
@@ -123,7 +123,7 @@ router.post('/', async (request, env) => {
 			case ASSIGN_COMMAND.name.toLowerCase(): {
 				//Pull all teams from DB, pull all users from DB
 				const champion = interaction.data.options[0].value;
-				const results = await server.getUsers(request, env);
+				const results = await server.getAllUsers(env);
 				const assignments = await server.assignTeams(results, champion, request, env);
 				let toPrint = ``;
 				for (let i = 0; i < assignments.length; i++) {
@@ -288,10 +288,18 @@ async function verifyDiscordRequest(request, env) {
 	return { interaction: JSON.parse(body), isValid: true };
 }
 
-async function checkUser(username, request, env) {
+async function doesUserExist(userid, env) {
 	const { results } = await env.ASSIGN_DB
-		.prepare("SELECT * FROM Persons WHERE username = ?;")
-		.bind(username)
+		.prepare("SELECT * FROM users WHERE userid = ?;")
+		.bind(userid)
+		.run();
+	return results;
+}
+
+async function addDiscordUser(userid, env) {
+	const { results } = await env.ASSIGN_DB
+		.prepare("INSERT INTO users (userid) VALUES (?);")
+		.bind(userid)
 		.run();
 	return results;
 }
@@ -458,16 +466,8 @@ async function assignTeams(results, champion, request, env) {
 	return assignments;
 }
 
-async function getAllUsers(request, env) {
-	const { results } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
-	return results;
-}
-
-async function addItem(username, team, isChamp, request, env) {
-	const { results } = await env.ASSIGN_DB
-		.prepare("INSERT INTO Persons (username, team, isChamp) VALUES (?, ?, ?);")
-		.bind(username, team, isChamp)
-		.run();
+async function getAllUsers(env) {
+	const { results } = await env.ASSIGN_DB.prepare("SELECT * FROM users;").run();
 	return results;
 }
 
@@ -510,11 +510,11 @@ async function scheduled(controller, env, ctx) {
 
 const server = {
 	verifyDiscordRequest,
-	getUsers: getAllUsers,
+	doesUserExist,
+	addDiscordUser,
+	getAllUsers,
 	getChamp,
 	assignTeams,
-	addItem,
-	checkUser,
 	scheduled,
 	createFirstMatch,
 	getUser,
