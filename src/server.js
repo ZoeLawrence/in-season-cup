@@ -207,7 +207,8 @@ router.post('/', async (request, env) => {
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
-        var currentdate = new Date(); 
+        const d = new Date(); 
+        const date = `${d.toUTCString}`
         var datetime = "Last Sync: " + currentdate.getDate() + "/"
                         + (currentdate.getMonth()+1)  + "/" 
                         + currentdate.getFullYear() + " @ "  
@@ -218,7 +219,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: datetime
+            content: date
           }
         });
       }
