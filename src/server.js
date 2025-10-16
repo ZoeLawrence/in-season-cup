@@ -208,18 +208,18 @@ router.post('/', async (request, env) => {
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
         const d = new Date(); 
-        const date = `${d.toUTCString}`
-        var datetime = "Last Sync: " + currentdate.getDate() + "/"
-                        + (currentdate.getMonth()+1)  + "/" 
-                        + currentdate.getFullYear() + " @ "  
-                        + currentdate.getHours() + ":"  
-                        + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
+        // const date = `${d.toUTCStrin()}`
+        // var datetime = "Last Sync: " + currentdate.getDate() + "/"
+        //                 + (currentdate.getMonth()+1)  + "/" 
+        //                 + currentdate.getFullYear() + " @ "  
+        //                 + currentdate.getHours() + ":"  
+        //                 + currentdate.getMinutes() + ":" 
+        //         + currentdate.getSeconds();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: date
+            content: d.toUTCString()
           }
         });
       }
