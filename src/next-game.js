@@ -1,4 +1,4 @@
-import { getCurrentMatchup } from './in-season-cup.js';
+import { getNHLData, getCurrentMatchup } from './in-season-cup.js';
 
 export async function testAssignments(env) {
     const { current } = await env.ASSIGN_DB
@@ -8,49 +8,57 @@ export async function testAssignments(env) {
         const game_time = new Date(current[0].time);
         const current_time = new Date();
         if(current_time.getTime() > game_time.getTime()) {
-            const res = await fetch(`https://api-web.nhle.com/v1/gamecenter/${current[0].gamed_id}/landing`);
-            if (!res.ok) {
-                let errorText = `Error fetching ${res.url}: ${res.status} ${res.statusText}`;
-                try {
-                const error = await res.text();
-                if (error) {
-                    errorText = `${errorText} \n\n ${error}`;
-                }
-                } catch {
-                // ignore
-                }
-                throw new Error(errorText);
-            }
-            const game_data = await res.json();
-            const away_score = game_data.awayTeam.score;
-            const home_score = game_data.homeTeam.score;
-            const champIsHome = results[0].team == game_data.homeTeam.abbrev;
-            const winnerIsHome = home_score > away_score;
+            const game_data = await getNHLData(`gamecenter/${current[0].gamed_id}/landing`);
+            const away_abbr = game_data.awayTeam.abbrev;
+            const home_abbr = game_data.homeTeam.abbrev;
 
-            if(winnerIsHome && !champIsHome) {
-                //switch champ 
-                
-            }
-            //find next match up for same team
-            
-            
-            let textContent = `# Current champ is <@${results[0].user_id}>\n`
-            if(champIsHome) {
-                const away = await server.getUser(game_data.awayTeam.abbrev, env);
-                textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
+            const currentChampIsHome = results[0].team == home_abbr;
+            const winnerIsHome = game_data.homeTeam.score > game_data.awayTeam.score;
+
+            const stmt = env.ASSIGN_DB.prepare("UPDATE players SET isChamp = ? WHERE team = ?;")
+            if(currentChampIsHome != winnerIsHome) {
+                await env.ASSIGN_DB.batch([
+                    stmt.bind(!winnerIsHome, away_abbr),
+                    stmt.bind(winnerIsHome, home_abbr)
+                ]);   
+            }    
+
+            // const results = await server.getChamp(env);
+            const { newChamp } = await env.ASSIGN_DB
+                .prepare("SELECT * FROM players WHERE isChamp = 1;")
+                .run();
+
+            // const game_data = await getCurrentMatchup(results[0].team, env);
+            const match_data = await getCurrentMatchup(newChamp[0].team, env);
+
+            const awayTeam = game_data.awayTeam.commonName.default;
+            const homeTeam = game_data.homeTeam.commonName.default;
+
+            // const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
+            const newChampIsHome = newChamp[0].team == game_data.homeTeam.abbrev;
+
+            // await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
+            const { current } = await env.ASSIGN_DB
+                    .prepare("UPDATE match SET game_id = ?, datetime = ? WHERE rowid = 1;")
+                    .bind(match_data.game_id, match_data.game_time)
+                    .run();
+
+            let textContent = ``
+            if(newChampIsHome) {
+                const away = await server.getUser(match_data.awayTeam.abbrev, env);
+                textContent +=  `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${newChamp[0].user_id}>'s ${homeTeam}`;
             } else {
-                const home = await server.getUser(game_data.homeTeam.abbrev, env);
-                textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
+                const home = await server.getUser(match_data.homeTeam.abbrev, env);
+                textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${newChamp[0].user_id}>'s ${awayTeam}`;
             }
             
-
             const token = env.DISCORD_TOKEN;
             const channelId = '1425222879703990332';
             const MESSAGE = {
                 tts: false,
                 embeds: [{
-                    title: "Hello, Embed!",
-                    description: `Current champ is ${results[0].team}, next match up is ${awayTeam} @ ${homeTeam}`
+                    title: `# Current champ is <@${newChamp[0].user_id}>`,
+                    description: textContent
                 }]
             }
             

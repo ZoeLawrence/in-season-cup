@@ -3,6 +3,25 @@
 //   return teamList[Math.floor(Math.random() * teamList.length)];
 // }
 
+export async function getNHLData(url) {
+  const response = await fetch(`https://api-web.nhle.com/v1/${url}`);
+  if (!response.ok) {
+    let errorText = `Error fetching ${response.url}: ${response.status} ${response.statusText}`;
+    try {
+      const error = await response.text();
+      if (error) {
+        errorText = `${errorText} \n\n ${error}`;
+      }
+    } catch {
+      // ignore
+    }
+    return errorText;
+    // throw new Error(errorText);
+  }
+  const data  = await response.json();
+  return data;
+}
+
 export async function getCurrentMatchup(currentChamp) {
   const response = await fetch(`https://api-web.nhle.com/v1/club-schedule/${currentChamp}/week/now`);
   if (!response.ok) {
