@@ -74,7 +74,7 @@ export async function testAssignments(env) {
             description = game_time.toLocaleDateString()
         }
     } else {
-        title = `No match found: ${current}`
+        title = `No match found: ${JSON.stringify(current)}`
         description = 'use /start to set up'
     }
 
