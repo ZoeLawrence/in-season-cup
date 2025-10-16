@@ -28,17 +28,17 @@ export async function testAssignments(env) {
 				title = `retains the cup!`
 			}
 
-			// // const results = await server.getChamp(env);
-			// const newChamp = await getNewChamp()
+			// const results = await server.getChamp(env);
+			const newChamp = await getNewChamp()
 
-			// // const game_data = await getCurrentMatchup(results[0].team, env);
-			// const match_data = await getCurrentMatchup(newChamp[0].team, env);
+			// const game_data = await getCurrentMatchup(results[0].team, env);
+			const match_data = await getCurrentMatchup(newChamp[0].team, env);
 
-			// const awayTeam = `${match_data.awayTeam.placeName.default} ${match_data.awayTeam.commonName.default}`;
-			// const homeTeam = `${match_data.homeTeam.placeName.default} ${match_data.homeTeam.commonName.default}`;
+			const awayTeam = `${match_data.awayTeam.placeName.default} ${match_data.awayTeam.commonName.default}`;
+			const homeTeam = `${match_data.homeTeam.placeName.default} ${match_data.homeTeam.commonName.default}`;
 
-			// // const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
-			// const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
+			// const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
+			const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
 
 			// // await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
 			// await getNextMatch(match_data.game_id, match_data.game_time, env);
