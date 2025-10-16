@@ -207,7 +207,7 @@ router.post('/', async (request, env) => {
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
-        const result = await server.testNextGame(env);
+        // const result = await server.testNextGame(env);
         // if(result[0] != undefined) {
         //   const game_time = new Date(result[0].datetime);
         //   const current_time = new Date();
@@ -252,13 +252,13 @@ router.post('/', async (request, env) => {
         //     });
         //   }
         // }
-        // await testAssignments(env);
-        // const d = new Date(); 
+        await testAssignments(env);
+        const d = new Date(); 
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `${JSON.stringify(result)}`
+            content: d.toISOString()
           }
         });
       }
