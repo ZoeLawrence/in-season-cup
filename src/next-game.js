@@ -8,8 +8,8 @@ export async function testAssignments(env) {
 		const game_time = new Date(currentMatch[0].datetime);
 		const current_time = new Date();
 		if (current_time.getTime() > game_time.getTime()) {
-			title = `current time`
-			description = current_time.toLocaleDateString()
+			// title = `current time`
+			// description = current_time.toLocaleDateString()
 			const game_data = await getNHLData(`gamecenter/${currentMatch[0].game_id}/landing`);
 			const away_abbr = game_data.awayTeam.abbrev;
 			const home_abbr = game_data.homeTeam.abbrev;
@@ -49,10 +49,10 @@ export async function testAssignments(env) {
 			const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 			if (newChampIsHome) {
 				const { away } = await player.bind(match_data.awayTeam.abbrev).run();
-				description += `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
+				description = `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
 			} else {
 				const { home } = await player.bind(match_data.homeTeam.abbrev).run();
-				description += `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
+				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
 			}
 			title = `# <@${newChamp[0].user_id}> ${title}`;
 		} else {
