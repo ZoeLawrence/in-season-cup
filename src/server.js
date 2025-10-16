@@ -9,7 +9,7 @@ import {
   verifyKey,
 } from 'discord-interactions';
 import { INVITE_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, PICKEMS_COMMAND, REASSIGN_COMMAND } from './commands.js';
-import { getCurrentMatchup } from './in-season-cup.js';
+import { getCurrentMatchup, getNHLData } from './in-season-cup.js';
 import { testAssignments } from './next-game.js';
 import { getPickEms } from './pickems.js';
 
@@ -215,7 +215,7 @@ router.post('/', async (request, env) => {
             const game_data = await getNHLData(`gamecenter/${current[0].gamed_id}/landing`);
             const away_abbr = game_data.awayTeam.abbrev;
             const home_abbr = game_data.homeTeam.abbrev;
-            
+
             return new JsonResponse({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
