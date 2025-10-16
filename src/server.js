@@ -229,7 +229,7 @@ router.post('/', async (request, env) => {
 
             const newChampIsHome = results[0].team == match_data.homeTeam.abbrev;
 
-            await server.testUpdateMatch(match_data.game_id, match_data.game_time);
+            await server.testUpdateMatch(match_data.game_id, match_data.game_time, env);
 
             let textContent = `test: ${results[0].team} ${match_data.game_id} ${match_data.game_time}`
             // if(newChampIsHome) {
