@@ -53,7 +53,7 @@ export async function testAssignments(env) {
 				const home = await getPlayer(match_data.homeTeam.abbrev, env)
 				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
 			}
-			title = `# <@${newChamp[0].user_id}> ${title}`;
+			title = `<@${newChamp[0].user_id}> ${title}`;
 		} else {
 			title = `game time`
 			description = game_time.toLocaleDateString()
