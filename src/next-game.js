@@ -40,21 +40,21 @@ export async function testAssignments(env) {
 			// const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
 			const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
 
-			// // await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
-			// await getNextMatch(match_data.game_id, match_data.game_time, env);
+			// await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
+			await getNextMatch(match_data.game_id, match_data.game_time, env);
 
-			// const game_day = new Date(match_data.game_time);
+			const game_day = new Date(match_data.game_time);
 
-			// const player = env.ASSIGN_DB.prepare("SELECT * FROM players WHERE team = ?;")
-			// const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-			// if (newChampIsHome) {
-			// 	const { away } = await player.bind(match_data.awayTeam.abbrev).run();
-			// 	description += `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
-			// } else {
-			// 	const { home } = await player.bind(match_data.homeTeam.abbrev).run();
-			// 	description += `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
-			// }
-			// title = `# <@${newChamp[0].user_id}> ${title}`;
+			const player = env.ASSIGN_DB.prepare("SELECT * FROM players WHERE team = ?;")
+			const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+			if (newChampIsHome) {
+				const { away } = await player.bind(match_data.awayTeam.abbrev).run();
+				description += `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
+			} else {
+				const { home } = await player.bind(match_data.homeTeam.abbrev).run();
+				description += `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
+			}
+			title = `# <@${newChamp[0].user_id}> ${title}`;
 		} else {
 			title = `game time`
 			description = game_time.toLocaleDateString()
