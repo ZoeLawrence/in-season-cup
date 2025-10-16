@@ -208,13 +208,6 @@ router.post('/', async (request, env) => {
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
         const result = await testNextGame(env);
-        // return new JsonResponse({
-        //     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        //     data: {
-        //       flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-        //       content: `new date ${result[0]}`
-        //     }
-        //   });
         if(result[0] != undefined) {
           const datetime = result[0].time;
           return new JsonResponse({
@@ -454,7 +447,7 @@ async function addItem(username, team, isChamp, request, env) {
 
 async function createFirstMatch(game_id, game_time, env) {
   const { results } = await env.ASSIGN_DB
-        .prepare("INSERT INTO current (game_id, time) VALUES (?, ?);")
+        .prepare("INSERT INTO match (game_id, time) VALUES (?, ?);")
         .bind(game_id, game_time)
         .run();
   return results;
@@ -462,7 +455,7 @@ async function createFirstMatch(game_id, game_time, env) {
 
 async function testNextGame(env) {
   const { results } = await env.ASSIGN_DB
-        .prepare("SELECT * FROM current;")
+        .prepare("SELECT * FROM match;")
         .run();
   return results;
 }
