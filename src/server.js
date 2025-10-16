@@ -461,10 +461,10 @@ async function createFirstMatch(game_id, game_time, env) {
 }
 
 async function testNextGame(env) {
-  const { current } = await env.ASSIGN_DB
+  const { results } = await env.ASSIGN_DB
         .prepare("SELECT * FROM current;")
         .run();
-  return current;
+  return results;
 }
 
 async function scheduled(controller, env, ctx) {
