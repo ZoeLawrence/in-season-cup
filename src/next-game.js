@@ -47,15 +47,15 @@ export async function testAssignments(env) {
 	
 			if (newChampIsHome) {
 				const away = await getPlayer(match_data.awayTeam.abbrev, env)
-				description = `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on <t:${game_day.toUTCString()}:F>!`;
+				description = `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on <t:${game_day.getTime()}:F>!`;
 			} else {
 				const home = await getPlayer(match_data.homeTeam.abbrev, env)
-				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on <t:${game_day.toUTCString()}:F>!`;
+				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on <t:${game_day.getTime()}:F>!`;
 			}
 			title = `<@${newChamp[0].user_id}> ${title}`;
 		} else {
 			title = `game time`
-			description = `<t:${game_time.toUTCString()}:F>` 
+			description = `<t:${game_time.getTime()}:F>` 
 		}
 	} else {
 		title = `No match found:`
