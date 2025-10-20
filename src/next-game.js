@@ -10,7 +10,7 @@ export async function testAssignments(env) {
 		if (current_time.getTime() > game_time.getTime()) {
 			// title = `current time`
 			// description = current_time.toLocaleDateString()
-			const game_data = await getNHLData(`gamecenter/${currentMatch[0].game_id}/landing`);
+			const game_data = await getNHLData(`gamecenter/${currentMatch[0].gameid}/landing`);
 			const away_abbr = game_data.awayTeam.abbrev;
 			const home_abbr = game_data.homeTeam.abbrev;
 
@@ -41,14 +41,14 @@ export async function testAssignments(env) {
 			const newChampIsHome = newChamp[0].team == match_data.homeTeam.abbrev;
 
 			// await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
-			await getNextMatch(match_data.game_id, match_data.game_time, env);
-
 			const game_day = new Date(match_data.game_time);
 	
 			if (newChampIsHome) {
+				await getNextMatch(match_data.game_id, match_data.game_time, match_data.homeTeam.abbrev, env);
 				const away = await getPlayer(match_data.awayTeam.abbrev, env)
 				description = `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on <t:${game_day.getTime()/1000}:F>!`;
 			} else {
+				await getNextMatch(match_data.game_id, match_data.game_time, match_data.awayTeam.abbrev, env);
 				const home = await getPlayer(match_data.homeTeam.abbrev, env)
 				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on <t:${game_day.getTime()/1000}:F>!`;
 			}
@@ -113,7 +113,7 @@ export async function testAssignments(env) {
 
 async function getCurrentMatch(env) {
 	const { results } = await env.ASSIGN_DB
-		.prepare("SELECT * FROM match;")
+		.prepare("SELECT * FROM matchup;")
 		.run();
 	return results;
 }
@@ -125,10 +125,10 @@ async function getNewChamp(env) {
 	return results;
 }
 
-async function getNextMatch(game_id, game_time, env) {
+async function getNextMatch(game_id, game_time, team, env) {
 	const { results } = await env.ASSIGN_DB
-		.prepare("UPDATE match SET game_id = ?, datetime = ? WHERE rowid = 1;")
-		.bind(game_id, game_time)
+		.prepare("UPDATE matchup SET gameid = ?, datetime = ?, team = ? WHERE rowid = 1;")
+		.bind(game_id, game_time, team)
 		.run();
 	return results;
 }
