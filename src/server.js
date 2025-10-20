@@ -174,17 +174,19 @@ router.post('/', async (request, env) => {
 			case START_COMMAND.name.toLowerCase(): {
 				const results = await server.getChamp(env);
 				const game_data = await getCurrentMatchup(results[0].team, env);
+
+				await server.createFirstMatch(game_data.game_id, game_data.game_time, results[0].team, env);
+				let textContent = `# Reigning champ is <@${results[0].user_id}>\n`
+
 				const awayTeam = game_data.awayTeam.commonName.default;
 				const homeTeam = game_data.homeTeam.commonName.default;
 				const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
-				await server.createFirstMatch(game_data.game_id, game_data.game_time, env);
-				let textContent = `# Current champ is <@${results[0].user_id}>\n`
 				if (winnerIsHome) {
 					const away = await server.getUser(game_data.awayTeam.abbrev, env);
-					textContent += `Next match up: <@${away[0].user_id}>'s ${awayTeam} faces <@${results[0].user_id}>'s ${homeTeam}`;
+					textContent += `First match up is between <@${away[0].user_id}>'s ${awayTeam} and <@${results[0].user_id}>'s ${homeTeam}`;
 				} else {
 					const home = await server.getUser(game_data.homeTeam.abbrev, env);
-					textContent += `Next match up: <@${home[0].user_id}>'s ${homeTeam} faces <@${results[0].user_id}>'s ${awayTeam}`;
+					textContent += `First match up is between <@${home[0].user_id}>'s ${homeTeam} and <@${results[0].user_id}>'s ${awayTeam}`;
 				}
 				return new JsonResponse({
 					type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -472,10 +474,10 @@ async function getAllUsers(env) {
 	return results;
 }
 
-async function createFirstMatch(game_id, game_time, env) {
+async function createFirstMatch(game_id, game_time, team, env) {
 	const { results } = await env.ASSIGN_DB
-		.prepare("INSERT INTO match (game_id, datetime) VALUES (?, ?);")
-		.bind(game_id, game_time)
+		.prepare("INSERT INTO matchup (gameid, datetime, team) VALUES (?, ?, ?);")
+		.bind(game_id, game_time, team)
 		.run();
 	return results;
 }
