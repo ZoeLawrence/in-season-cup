@@ -467,7 +467,8 @@ async function assignTeams(results, champion, request, env) {
 }
 
 async function getAllUsers(env) {
-	const { results } = await env.ASSIGN_DB.prepare("SELECT * FROM users;").run();
+	//TODO: change Persons -> users
+	const { results } = await env.ASSIGN_DB.prepare("SELECT * FROM Persons;").run();
 	return results;
 }
 

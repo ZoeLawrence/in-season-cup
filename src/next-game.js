@@ -44,19 +44,18 @@ export async function testAssignments(env) {
 			await getNextMatch(match_data.game_id, match_data.game_time, env);
 
 			const game_day = new Date(match_data.game_time);
-			const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
+	
 			if (newChampIsHome) {
 				const away = await getPlayer(match_data.awayTeam.abbrev, env)
-				description = `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on ${days[game_day.getDay()]}!`;
+				description = `<@${newChamp[0].user_id}>'s ${homeTeam} will move on to face <@${away[0].user_id}>'s ${awayTeam} on <t:${game_day.toISOString()}:F>!`;
 			} else {
 				const home = await getPlayer(match_data.homeTeam.abbrev, env)
-				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on ${days[game_day.getDay()]}!`;
+				description = `<@${newChamp[0].user_id}>'s ${awayTeam} will move on to face <@${home[0].user_id}>'s ${homeTeam} on <t:${game_day.toISOString()}:F>!`;
 			}
 			title = `<@${newChamp[0].user_id}> ${title}`;
 		} else {
 			title = `game time`
-			description = game_time.toLocaleDateString()
+			description = `<t:${game_time.toISOString()}:F>` 
 		}
 	} else {
 		title = `No match found:`
