@@ -183,10 +183,10 @@ router.post('/', async (request, env) => {
 				const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
 				if (winnerIsHome) {
 					const away = await server.getUser(game_data.awayTeam.abbrev, env);
-					textContent += `First match up is between <@${away[0].user_id}>'s ${awayTeam} and <@${results[0].user_id}>'s ${homeTeam}`;
+					textContent += `First match up is between  <@${results[0].user_id}>'s ${homeTeam} and <@${away[0].user_id}>'s ${awayTeam}`;
 				} else {
 					const home = await server.getUser(game_data.homeTeam.abbrev, env);
-					textContent += `First match up is between <@${home[0].user_id}>'s ${homeTeam} and <@${results[0].user_id}>'s ${awayTeam}`;
+					textContent += `First match up is between <@${results[0].user_id}>'s ${awayTeam} and <@${home[0].user_id}>'s ${homeTeam}`;
 				}
 				return new JsonResponse({
 					type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
