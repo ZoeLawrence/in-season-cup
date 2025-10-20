@@ -55,7 +55,7 @@ export async function testAssignments(env) {
 			title = `<@${newChamp[0].user_id}> ${title}`;
 		} else {
 			title = `game time`
-			description = `<t:${game_time.getTime()}:F>` 
+			description = `<t: ${game_time.getTime()} :F>` 
 		}
 	} else {
 		title = `No match found:`
