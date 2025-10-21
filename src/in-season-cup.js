@@ -23,7 +23,11 @@ export async function getNHLData(url) {
 }
 
 export async function getCurrentMatchup(currentChamp) {
-  const response = await fetch(`https://api-web.nhle.com/v1/club-schedule/${currentChamp}/week/now`);
+  const current_time = new Date();
+  const year = current_time.getFullYear();
+  const month = current_time.getMonth();
+  const day = current_time.getDate();
+  const response = await fetch(`https://api-web.nhle.com/v1/club-schedule/${currentChamp}/week/${year}-${month}-${day}`);
   if (!response.ok) {
     let errorText = `Error fetching ${response.url}: ${response.status} ${response.statusText}`;
     try {
@@ -38,6 +42,7 @@ export async function getCurrentMatchup(currentChamp) {
     // throw new Error(errorText);
   }
   const data = await response.json();
+  //TODO: For the olympics break this is will break?
   const game = data.games[0];
   // const awayTeam = game.awayTeam.commonName.default;
   // const homeTeam = game.homeTeam.commonName.default;

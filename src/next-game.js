@@ -19,6 +19,7 @@ export async function testAssignments(env) {
 
 			const stmt = env.ASSIGN_DB.prepare("UPDATE players SET isChamp = ? WHERE team = ?;")
 			if (currentChampIsHome != winnerIsHome) {
+				//If this continues to not work examine this
 				await env.ASSIGN_DB.batch([
 					stmt.bind(!winnerIsHome, away_abbr),
 					stmt.bind(winnerIsHome, home_abbr)
