@@ -257,7 +257,7 @@ router.post('/', async (request, env) => {
 				// await testAssignments(env);
 				const current_time = new Date();
 				const year = current_time.getFullYear();
-				const month = current_time.getMonth();
+				const month = current_time.getMonth() + 1;
 				const day = current_time.getDate();
 				// const response = await fetch(`https://api-web.nhle.com/v1/club-schedule/${currentChamp}/week/${year}-${month}-${day}`);
 				// const d = new Date();
