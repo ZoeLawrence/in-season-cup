@@ -136,7 +136,7 @@ router.post('/', async (request, env) => {
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
               flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-              content: `There are only ${results.length} users but 32 teams, you need more people to play!`,
+              content: `Number of players: ${results.length}, you need 32 people to play!`,
             },
           });
         }
