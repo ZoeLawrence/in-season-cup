@@ -131,6 +131,15 @@ router.post('/', async (request, env) => {
         //Pull all teams from DB, pull all users from DB
         const champion = interaction.data.options[0].value;
         const results = await server.getAllUsers(env);
+        if (results.length < 32) {
+          return new JsonResponse({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+              content: `There are only ${results.length} users but 32 teams, you need more people to play!`,
+            },
+          });
+        }
         const assignments = await server.assignTeams(
           results,
           champion,
@@ -435,7 +444,7 @@ async function assignTeams(results, champion, request, env) {
   );
   while (teamList.length) {
     const team = teamList.splice((teamList.length * Math.random()) | 0, 1)[0];
-    const userId = results[x].username;
+    const userId = results[x].userid;
     const isChamp = team.value == champion;
     statments[x] = stmt.bind(team.value, userId, isChamp);
     assignments[x] = { team: team.name, id: userId };
@@ -446,10 +455,7 @@ async function assignTeams(results, champion, request, env) {
 }
 
 async function getAllUsers(env) {
-  //TODO: change Persons -> users
-  const { results } = await env.ASSIGN_DB.prepare(
-    'SELECT * FROM Persons;',
-  ).run();
+  const { results } = await env.ASSIGN_DB.prepare('SELECT * FROM users;').run();
   return results;
 }
 
