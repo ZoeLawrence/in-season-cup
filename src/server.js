@@ -462,7 +462,7 @@ async function assignTeams(results, champion, request, env) {
   );
   while (teamList.length) {
     const team = teamList.splice((teamList.length * Math.random()) | 0, 1)[0];
-    const userId = results[x].userid;
+    const userId = results[x].username;
     const isChamp = team.value == champion;
     statments[x] = stmt.bind(team.value, userId, isChamp);
     assignments[x] = { team: team.name, id: userId };
