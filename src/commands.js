@@ -20,11 +20,12 @@ export const ASSIGN_COMMAND = {
   options: [
     {
       name: 'champion',
-      description: 'team that starts with the cup, use three letter code (ex: SEA)',
+      description:
+        'team that starts with the cup, use three letter code (ex: SEA)',
       type: 3,
       required: true,
     },
-  ]
+  ],
 };
 
 export const REASSIGN_COMMAND = {
@@ -48,7 +49,7 @@ export const REASSIGN_COMMAND = {
           type: 6,
           required: true,
         },
-      ]
+      ],
     },
     {
       name: 'replace',
@@ -63,13 +64,14 @@ export const REASSIGN_COMMAND = {
         },
         {
           name: 'team',
-          description: 'team new player is assigned to, use three letter code (ex: SEA)',
+          description:
+            'team new player is assigned to, use three letter code (ex: SEA)',
           type: 3,
           required: true,
         },
-      ]
-    }
-  ]
+      ],
+    },
+  ],
 };
 
 export const START_COMMAND = {
@@ -79,5 +81,5 @@ export const START_COMMAND = {
 
 export const PICKEMS_COMMAND = {
   name: 'pick-ems',
-  description: 'starts a game of pickems'
-}
+  description: 'starts a game of pickems',
+};

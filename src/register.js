@@ -1,4 +1,11 @@
-import { INVITE_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, PICKEMS_COMMAND, REASSIGN_COMMAND} from './commands.js';
+import {
+  INVITE_COMMAND,
+  JOIN_COMMAND,
+  ASSIGN_COMMAND,
+  START_COMMAND,
+  PICKEMS_COMMAND,
+  REASSIGN_COMMAND,
+} from './commands.js';
 import dotenv from 'dotenv';
 import process from 'node:process';
 
@@ -28,7 +35,16 @@ if (!applicationId) {
  */
 const url = `https://discord.com/api/v10/applications/${applicationId}/commands`;
 
-console.log(JSON.stringify([INVITE_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, PICKEMS_COMMAND, REASSIGN_COMMAND]));
+console.log(
+  JSON.stringify([
+    INVITE_COMMAND,
+    JOIN_COMMAND,
+    ASSIGN_COMMAND,
+    START_COMMAND,
+    PICKEMS_COMMAND,
+    REASSIGN_COMMAND,
+  ]),
+);
 
 const response = await fetch(url, {
   headers: {
@@ -36,7 +52,14 @@ const response = await fetch(url, {
     Authorization: `Bot ${token}`,
   },
   method: 'PUT',
-  body: JSON.stringify([INVITE_COMMAND, JOIN_COMMAND, ASSIGN_COMMAND, START_COMMAND, PICKEMS_COMMAND, REASSIGN_COMMAND]),
+  body: JSON.stringify([
+    INVITE_COMMAND,
+    JOIN_COMMAND,
+    ASSIGN_COMMAND,
+    START_COMMAND,
+    PICKEMS_COMMAND,
+    REASSIGN_COMMAND,
+  ]),
 });
 
 if (response.ok) {
