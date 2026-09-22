@@ -441,7 +441,7 @@ async function assignTeams(results, champion, request, env) {
     assignments[x] = { team: team.name, id: userId };
     x++;
   }
-  const { res } = await env.ASSIGN_DB.batch(statments);
+  await env.ASSIGN_DB.batch(statments);
   return assignments;
 }
 
