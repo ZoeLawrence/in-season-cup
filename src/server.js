@@ -194,26 +194,6 @@ router.post('/', async (request, env) => {
       }
       case START_COMMAND.name.toLowerCase(): {
         const results = await server.getChamp(env);
-        const game_data = await getCurrentMatchup(results[0].team, env);
-
-        await server.createFirstMatch(
-          game_data.game_id,
-          game_data.game_time,
-          results[0].team,
-          env,
-        );
-        let textContent = `# Reigning champ is <@${results[0].user_id}>\n`;
-
-        const awayTeam = game_data.awayTeam.commonName.default;
-        const homeTeam = game_data.homeTeam.commonName.default;
-        const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
-        if (winnerIsHome) {
-          const away = await server.getUser(game_data.awayTeam.abbrev, env);
-          textContent += `First match up is between  <@${results[0].user_id}>'s ${homeTeam} and <@${away[0].user_id}>'s ${awayTeam}`;
-        } else {
-          const home = await server.getUser(game_data.homeTeam.abbrev, env);
-          textContent += `First match up is between <@${results[0].user_id}>'s ${awayTeam} and <@${home[0].user_id}>'s ${homeTeam}`;
-        }
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
@@ -225,13 +205,51 @@ router.post('/', async (request, env) => {
                 components: [
                   {
                     type: 10, // ComponentType.TEXT_DISPLAY
-                    content: textContent,
+                    content: `${results}`,
                   },
                 ],
               },
             ],
           },
         });
+        // const game_data = await getCurrentMatchup(results[0].team, env);
+
+        // await server.createFirstMatch(
+        //   game_data.game_id,
+        //   game_data.game_time,
+        //   results[0].team,
+        //   env,
+        // );
+        // let textContent = `# Reigning champ is <@${results[0].user_id}>\n`;
+
+        // const awayTeam = game_data.awayTeam.commonName.default;
+        // const homeTeam = game_data.homeTeam.commonName.default;
+        // const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
+        // if (winnerIsHome) {
+        //   const away = await server.getUser(game_data.awayTeam.abbrev, env);
+        //   textContent += `First match up is between  <@${results[0].user_id}>'s ${homeTeam} and <@${away[0].user_id}>'s ${awayTeam}`;
+        // } else {
+        //   const home = await server.getUser(game_data.homeTeam.abbrev, env);
+        //   textContent += `First match up is between <@${results[0].user_id}>'s ${awayTeam} and <@${home[0].user_id}>'s ${homeTeam}`;
+        // }
+        // return new JsonResponse({
+        //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        //   data: {
+        //     flags: 32768,
+        //     components: [
+        //       {
+        //         type: 17, // ComponentType.CONTAINER
+        //         accent_color: 703487,
+        //         components: [
+        //           {
+        //             type: 10, // ComponentType.TEXT_DISPLAY
+        //             content: textContent,
+        //           },
+        //         ],
+        //       },
+        //     ],
+        //   },
+        // });
       }
       case PICKEMS_COMMAND.name.toLowerCase(): {
         // const pickemsResult = await getPickEms();
