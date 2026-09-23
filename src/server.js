@@ -235,13 +235,13 @@ router.post('/', async (request, env) => {
       }
       case NEXT_GAME_COMMAND.name.toLowerCase(): {
         const channel = await server.getChannel(env);
-        await testAssignments(env);
+        await testAssignments(channel[0].channelid, env);
         const d = new Date();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `${channel[0].channelid} ${d.toISOString()}`,
+            content: d.toISOString(),
           },
         });
       }
