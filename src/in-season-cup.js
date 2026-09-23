@@ -50,10 +50,8 @@ export async function getCurrentMatchup(currentChamp) {
     // throw new Error(errorText);
   }
   const data = await response.json();
-  return data;
   //TODO: For the olympics break this is will break?
-  //
-  // TODO---- const game = data.games[0];
+  const game = data.games[0];
   // const awayTeam = game.awayTeam.commonName.default;
   // const homeTeam = game.homeTeam.commonName.default;
 
@@ -71,12 +69,11 @@ export async function getCurrentMatchup(currentChamp) {
   //     .filter((post) => !!post);
   //   const randomIndex = Math.floor(Math.random() * posts.length);
   //   const randomPost = posts[randomIndex];
-  // TODO----
-  // return {
-  //   game_id: game.id,
-  //   game_time: game.startTimeUTC,
-  //   homeTeam: game.homeTeam,
-  //   awayTeam: game.awayTeam,
-  // };
+  return {
+    game_id: game.id,
+    game_time: game.startTimeUTC,
+    homeTeam: game.homeTeam,
+    awayTeam: game.awayTeam,
+  };
   //`${JSON.stringify(results)} Current champ is ${currentChamp}, match up is ${awayTeam} @ ${homeTeam}`
 }
