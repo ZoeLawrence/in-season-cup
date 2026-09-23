@@ -234,8 +234,8 @@ router.post('/', async (request, env) => {
         });
       }
       case NEXT_GAME_COMMAND.name.toLowerCase(): {
-        const channel = server.getChannel(env);
-        await testAssignments(channel[0].channelid, env);
+        // const channel = server.getChannel(env);
+        await testAssignments(env);
         const d = new Date();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

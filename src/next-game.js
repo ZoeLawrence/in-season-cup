@@ -1,6 +1,6 @@
 import { getNHLData, getCurrentMatchup } from './in-season-cup.js';
 
-export async function testAssignments(channelId, env) {
+export async function testAssignments(env) {
   let title = ``;
   let description = ``;
   const currentMatch = await getCurrentMatch(env);
@@ -87,6 +87,7 @@ export async function testAssignments(channelId, env) {
     ],
   };
   const token = env.DISCORD_TOKEN;
+  const channelId = '1425222879703990332';
 
   if (!token) {
     throw new Error('The DISCORD_TOKEN environment variable is required.');
