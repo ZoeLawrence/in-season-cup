@@ -25,7 +25,13 @@ export async function getNHLData(url) {
 export async function getCurrentMatchup(currentChamp) {
   const current_time = new Date();
   const year = current_time.getFullYear();
-  const month = current_time.getMonth() + 1;
+  const rawMonth = current_time.getMonth() + 1;
+  let month = ``;
+  if (rawMonth < 10) {
+    month = `0${rawMonth}`;
+  } else {
+    month = rawMonth;
+  }
   const day = current_time.getDate();
   const response = await fetch(
     `https://api-web.nhle.com/v1/club-schedule/${currentChamp}/week/${year}-${month}-${day}`,
