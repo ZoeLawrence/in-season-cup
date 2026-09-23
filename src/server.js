@@ -13,8 +13,9 @@ import {
   JOIN_COMMAND,
   ASSIGN_COMMAND,
   START_COMMAND,
-  PICKEMS_COMMAND,
+  NEXT_GAME_COMMAND,
   REASSIGN_COMMAND,
+  SET_CHANNEL_COMMAND,
 } from './commands.js';
 import { getCurrentMatchup } from './in-season-cup.js';
 import { testAssignments } from './next-game.js';
@@ -208,7 +209,7 @@ router.post('/', async (request, env) => {
         const winnerIsHome = results[0].team == game_data.homeTeam.abbrev;
         if (winnerIsHome) {
           const away = await server.getUser(game_data.awayTeam.abbrev, env);
-          textContent += `First match up is between  <@${results[0].user_id}>'s ${homeTeam} and <@${away[0].user_id}>'s ${awayTeam}`;
+          textContent += `First match up is between <@${results[0].user_id}>'s ${homeTeam} and <@${away[0].user_id}>'s ${awayTeam}`;
         } else {
           const home = await server.getUser(game_data.homeTeam.abbrev, env);
           textContent += `First match up is between <@${results[0].user_id}>'s ${awayTeam} and <@${home[0].user_id}>'s ${homeTeam}`;
@@ -232,8 +233,7 @@ router.post('/', async (request, env) => {
           },
         });
       }
-      case PICKEMS_COMMAND.name.toLowerCase(): {
-        // const pickemsResult = await getPickEms();
+      case NEXT_GAME_COMMAND.name.toLowerCase(): {
         await testAssignments(env);
         const d = new Date();
         return new JsonResponse({
@@ -241,6 +241,17 @@ router.post('/', async (request, env) => {
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
             content: d.toISOString(),
+          },
+        });
+      }
+      case SET_CHANNEL_COMMAND.name.toLowerCase(): {
+        const channelid = interaction.data.options[0].value;
+        await server.addDiscordUser(channelid, env);
+        return new JsonResponse({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: `Set channel to ${channelid}`,
+            flags: InteractionResponseFlags.EPHEMERAL,
           },
         });
       }
@@ -284,6 +295,15 @@ async function addDiscordUser(userid, env) {
     'INSERT INTO users (userid) VALUES (?);',
   )
     .bind(userid)
+    .run();
+  return results;
+}
+
+async function addChannel(channelid, env) {
+  const { results } = await env.ASSIGN_DB.prepare(
+    'INSERT INTO channel (channelid) VALUES (?);',
+  )
+    .bind(channelid)
     .run();
   return results;
 }
@@ -475,6 +495,7 @@ const server = {
   verifyDiscordRequest,
   doesUserExist,
   addDiscordUser,
+  addChannel,
   getAllUsers,
   getChamp,
   assignTeams,

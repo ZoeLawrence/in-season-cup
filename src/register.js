@@ -3,8 +3,9 @@ import {
   JOIN_COMMAND,
   ASSIGN_COMMAND,
   START_COMMAND,
-  PICKEMS_COMMAND,
+  NEXT_GAME_COMMAND,
   REASSIGN_COMMAND,
+  SET_CHANNEL_COMMAND,
 } from './commands.js';
 import dotenv from 'dotenv';
 import process from 'node:process';
@@ -41,8 +42,9 @@ console.log(
     JOIN_COMMAND,
     ASSIGN_COMMAND,
     START_COMMAND,
-    PICKEMS_COMMAND,
+    NEXT_GAME_COMMAND,
     REASSIGN_COMMAND,
+    SET_CHANNEL_COMMAND,
   ]),
 );
 
@@ -57,8 +59,9 @@ const response = await fetch(url, {
     JOIN_COMMAND,
     ASSIGN_COMMAND,
     START_COMMAND,
-    PICKEMS_COMMAND,
+    NEXT_GAME_COMMAND,
     REASSIGN_COMMAND,
+    SET_CHANNEL_COMMAND,
   ]),
 });
 

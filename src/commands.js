@@ -79,7 +79,13 @@ export const START_COMMAND = {
   description: 'starts the tournament',
 };
 
-export const PICKEMS_COMMAND = {
-  name: 'pick-ems',
-  description: 'starts a game of pickems',
+export const NEXT_GAME_COMMAND = {
+  name: 'next-game',
+  description:
+    'gets the next game that the current winner plays or posts who won',
+};
+
+export const SET_CHANNEL_COMMAND = {
+  name: 'set-channel',
+  description: 'sets the channel for the in season cup',
 };

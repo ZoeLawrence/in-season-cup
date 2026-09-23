@@ -47,28 +47,10 @@ export async function getCurrentMatchup(currentChamp) {
       // ignore
     }
     return errorText;
-    // throw new Error(errorText);
   }
   const data = await response.json();
   //TODO: For the olympics break this is will break?
   const game = data.games[0];
-  // const awayTeam = game.awayTeam.commonName.default;
-  // const homeTeam = game.homeTeam.commonName.default;
-
-  //   const posts = data.games.children
-  //     .map((post) => {
-  //       if (post.is_gallery) {
-  //         return '';
-  //       }
-  //       return (
-  //         post.data?.media?.reddit_video?.fallback_url ||
-  //         post.data?.secure_media?.reddit_video?.fallback_url ||
-  //         post.data?.url
-  //       );
-  //     })
-  //     .filter((post) => !!post);
-  //   const randomIndex = Math.floor(Math.random() * posts.length);
-  //   const randomPost = posts[randomIndex];
   return {
     game_id: game.id,
     game_time: game.startTimeUTC,
