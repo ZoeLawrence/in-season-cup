@@ -206,7 +206,7 @@ router.post('/', async (request, env) => {
                 components: [
                   {
                     type: 10, // ComponentType.TEXT_DISPLAY
-                    content: `${game_data.game_id}, ${game_data.game_time}, ${results[0].team}`,
+                    content: `${JSON.stringify(game_data)}`,
                   },
                 ],
               },
@@ -473,7 +473,7 @@ async function assignTeams(results, champion, request, env) {
 }
 
 async function getAllUsers(env) {
-  const { results } = await env.ASSIGN_DB.prepare('SELECT * FROM Persons;').run();
+  const { results } = await env.ASSIGN_DB.prepare('SELECT * FROM users;').run();
   return results;
 }
 
