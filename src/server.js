@@ -241,7 +241,7 @@ router.post('/', async (request, env) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            content: `${channel} ${d.toISOString()}`,
+            content: `${channel[0]} ${d.toISOString()}`,
           },
         });
       }
