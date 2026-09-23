@@ -234,7 +234,8 @@ router.post('/', async (request, env) => {
         });
       }
       case NEXT_GAME_COMMAND.name.toLowerCase(): {
-        await testAssignments(env);
+        const channelid = server.getChannel(env);
+        await testAssignments(channelid, env);
         const d = new Date();
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -314,6 +315,13 @@ async function getUser(team, env) {
   )
     .bind(team)
     .run();
+  return results;
+}
+
+async function getChannel(env) {
+  const { results } = await env.ASSIGN_DB.prepare(
+    'SELECT * FROM channel;',
+  ).run();
   return results;
 }
 
@@ -502,6 +510,7 @@ const server = {
   scheduled,
   createFirstMatch,
   getUser,
+  getChannel,
   fetch: router.fetch,
 };
 
