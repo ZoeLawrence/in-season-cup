@@ -206,14 +206,14 @@ router.post('/', async (request, env) => {
                 components: [
                   {
                     type: 10, // ComponentType.TEXT_DISPLAY
-                    content: `${JSON.stringify(game_data)}`,
+                    content: `${game_data.game_id}, ${game_data.game_time}`,
                   },
                 ],
               },
             ],
           },
         });
-
+        //` ${JSON.stringify(game_data)}`,
         // await server.createFirstMatch(
         //   game_data.game_id,
         //   game_data.game_time,
