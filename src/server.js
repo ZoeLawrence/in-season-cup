@@ -246,7 +246,7 @@ router.post('/', async (request, env) => {
       }
       case SET_CHANNEL_COMMAND.name.toLowerCase(): {
         const channelid = interaction.data.options[0].value;
-        await server.addDiscordUser(channelid, env);
+        await server.addChannel(channelid, env);
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {

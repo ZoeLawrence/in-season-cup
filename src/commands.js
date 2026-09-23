@@ -88,4 +88,13 @@ export const NEXT_GAME_COMMAND = {
 export const SET_CHANNEL_COMMAND = {
   name: 'set-channel',
   description: 'sets the channel for the in season cup',
+  type: 1, // 1 is type SUB_COMMAND
+  options: [
+    {
+      name: 'channel',
+      description: 'channel where in season cup messages will post',
+      type: 3,
+      required: true,
+    },
+  ],
 };
